@@ -1,0 +1,16 @@
+import type { MetadataRoute } from "next";
+
+export const dynamic = "force-static";
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: "AirgapPDF — private PDF tools",
+    short_name: "AirgapPDF",
+    description: "PDF tools that work with your wifi off. Files never leave your device.",
+    start_url: "/",
+    display: "standalone",
+    background_color: "#fafaf8",
+    theme_color: "#047857",
+    icons: [{ src: "/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }],
+  };
+}
