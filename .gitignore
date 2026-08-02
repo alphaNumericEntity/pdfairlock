@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+public/pdf.worker.min.mjs
+public/pdfjs/
+public/ops.worker.js
+.DS_Store
+*.local

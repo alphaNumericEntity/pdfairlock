@@ -1,0 +1,38 @@
+{
+  "name": "airgap-pdf",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "predev": "node scripts/build-worker.mjs",
+    "dev": "next dev",
+    "prebuild": "node scripts/build-worker.mjs",
+    "build": "next build",
+    "postinstall": "node scripts/copy-pdf-worker.mjs && node scripts/build-worker.mjs",
+    "test": "vitest run",
+    "check": "biome check src tests scripts",
+    "format": "biome check --write src tests scripts",
+    "check-types": "tsc --noEmit",
+    "keygen": "node scripts/keygen.mjs"
+  },
+  "dependencies": {
+    "@noble/ed25519": "^2.1.0",
+    "fflate": "^0.8.2",
+    "next": "^16.0.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.0",
+    "@napi-rs/canvas": "^1.0.3",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "esbuild": "^0.28.1",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
+}
