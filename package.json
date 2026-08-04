@@ -9,8 +9,9 @@
     "build": "next build",
     "postinstall": "node scripts/copy-pdf-worker.mjs && node scripts/build-worker.mjs",
     "test": "vitest run",
-    "check": "biome check src tests scripts",
-    "format": "biome check --write src tests scripts",
+    "test:e2e": "playwright test",
+    "check": "biome check src tests scripts e2e playwright.config.ts",
+    "format": "biome check --write src tests scripts e2e playwright.config.ts",
     "check-types": "tsc --noEmit",
     "keygen": "node scripts/keygen.mjs"
   },
@@ -26,6 +27,8 @@
   "devDependencies": {
     "@biomejs/biome": "^2.0.0",
     "@napi-rs/canvas": "^1.0.3",
+    "@neslinesli93/qpdf-wasm": "^0.3.0",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^24.0.0",
     "@types/react": "^19.0.0",

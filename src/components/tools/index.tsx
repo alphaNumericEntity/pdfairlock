@@ -5,6 +5,7 @@ import { CompressTool } from "./compress-tool";
 import { ImagesToPdfTool } from "./images-to-pdf-tool";
 import { MergeTool } from "./merge-tool";
 import { PagesTool } from "./pages-tool";
+import { PasswordTool } from "./password-tool";
 import { PdfToImagesTool } from "./pdf-to-images-tool";
 import { RedactTool } from "./redact-tool";
 import { RotateTool } from "./rotate-tool";
@@ -21,6 +22,8 @@ export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "compress-pdf": CompressTool,
   "redact-pdf": RedactTool,
   "sign-pdf": SignTool,
+  "unlock-pdf": () => <PasswordTool mode="unlock" />,
+  "protect-pdf": () => <PasswordTool mode="protect" />,
   "jpg-to-pdf": ImagesToPdfTool,
   "pdf-to-jpg": PdfToImagesTool,
   "watermark-pdf": () => <WatermarkTool mode="watermark" />,

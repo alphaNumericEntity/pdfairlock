@@ -25,4 +25,7 @@ for (const [from, to] of copies) {
   mkdirSync(dirname(dest), { recursive: true });
   cpSync(src, dest, { recursive: true });
 }
-console.log("[copy-pdf-worker] pdf.js worker + cmaps/fonts/wasm copied into public/");
+
+const qpdfWasm = join(root, "node_modules/@neslinesli93/qpdf-wasm/dist/qpdf.wasm");
+if (existsSync(qpdfWasm)) cpSync(qpdfWasm, join(root, "public/qpdf.wasm"));
+console.log("[copy-pdf-worker] pdf.js assets + qpdf.wasm copied into public/");

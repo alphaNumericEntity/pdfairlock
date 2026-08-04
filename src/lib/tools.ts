@@ -164,6 +164,48 @@ export const TOOLS: ToolMeta[] = [
     ],
   },
   {
+    slug: "unlock-pdf",
+    name: "Unlock PDF",
+    shortName: "Unlock",
+    tagline: "Remove a password you know — the password never leaves your device.",
+    metaTitle: "Remove PDF password without uploading — free & private",
+    metaDescription:
+      "Unlock a password-protected PDF entirely in your browser. Neither the file nor the password is ever sent anywhere. Free, no account.",
+    accept: "pdf",
+    faq: [
+      {
+        q: "Is it safe to type the password here?",
+        a: "Yes — that's the point of this tool. Both the file and the password are processed in your browser's memory only. Upload-based unlock tools receive your password on their servers; here there is no server to receive it. Verify with your network tab, or go offline first.",
+      },
+      {
+        q: "Can this crack a password I don't know?",
+        a: "No. This tool removes protection from files you can legitimately open — you need the password (or the file must be restriction-locked only, without an open password). It is not a password recovery tool.",
+      },
+      ...COMMON_FAQ.slice(1),
+    ],
+  },
+  {
+    slug: "protect-pdf",
+    name: "Protect PDF",
+    shortName: "Protect",
+    tagline: "Add AES-256 password protection — without the file going anywhere.",
+    metaTitle: "Password-protect PDF without uploading — AES-256, free & private",
+    metaDescription:
+      "Add a password to a PDF with AES-256 encryption, entirely in your browser. The file and password never leave your device.",
+    accept: "pdf",
+    faq: [
+      {
+        q: "What encryption is used?",
+        a: "AES-256, the strongest encryption the PDF standard supports, applied by qpdf — the same open-source engine used in professional PDF pipelines — compiled to WebAssembly and running in your browser.",
+      },
+      {
+        q: "What happens if I forget the password?",
+        a: "The file is genuinely encrypted, and we never see or store anything — there is no reset. Keep the password somewhere safe, like a password manager.",
+      },
+      ...COMMON_FAQ.slice(1),
+    ],
+  },
+  {
     slug: "jpg-to-pdf",
     name: "Images to PDF",
     shortName: "JPG → PDF",

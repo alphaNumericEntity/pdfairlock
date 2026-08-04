@@ -7,5 +7,9 @@ next-env.d.ts
 public/pdf.worker.min.mjs
 public/pdfjs/
 public/ops.worker.js
+public/qpdf.worker.js
+public/qpdf.wasm
+test-results/
+playwright-report/
 .DS_Store
 *.local
