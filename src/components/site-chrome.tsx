@@ -3,7 +3,7 @@ import { Logo } from "./icons";
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-zinc-200 bg-white">
+    <header className="border-b border-zinc-200 bg-surface">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <Link href="/" className="flex items-center gap-2 font-semibold text-lg">
           <Logo className="h-7 w-7" />
@@ -32,7 +32,7 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-zinc-200 bg-white">
+    <footer className="mt-24 border-t border-zinc-200 bg-surface">
       <div className="mx-auto max-w-6xl px-4 py-10 text-sm text-ink-soft">
         <div className="flex flex-col gap-6 sm:flex-row sm:justify-between">
           <div className="max-w-md space-y-2">
@@ -56,6 +56,12 @@ export function SiteFooter() {
             </Link>
             <Link href="/redact-pdf" className="hover:text-ink">
               Redact a PDF
+            </Link>
+            <Link href="/why-not-upload-pdfs" className="hover:text-ink">
+              Why never upload PDFs
+            </Link>
+            <Link href="/pdf-redaction-for-law-firms" className="hover:text-ink">
+              For law firms
             </Link>
           </nav>
         </div>

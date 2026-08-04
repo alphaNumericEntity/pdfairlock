@@ -1,12 +1,80 @@
 @import "tailwindcss";
 
-@theme {
-  --color-ink: #0c1222;
-  --color-ink-soft: #3f4a5f;
-  --color-paper: #fafaf8;
-  --color-brand: #047857;
-  --color-brand-dark: #065f46;
-  --color-brand-soft: #ecfdf5;
+:root {
+  color-scheme: light dark;
+  --page: #fafaf8;
+  --ink: #0c1222;
+  --ink-soft: #3f4a5f;
+  --surface: #ffffff;
+  --surface-muted: #f4f4f5;
+  --edge-subtle: #f4f4f5;
+  --edge: #e4e4e7;
+  --edge-strong: #d4d4d8;
+  --faint: #a1a1aa;
+  --brand: #047857;
+  --brand-dark: #065f46;
+  --brand-soft: #ecfdf5;
+  --warn-bg: #fffbeb;
+  --warn-edge: #fde68a;
+  --warn-edge-strong: #fcd34d;
+  --warn-text: #b45309;
+  --warn-text-strong: #92400e;
+  --err-bg: #fef2f2;
+  --err-edge: #fecaca;
+  --err-action: #dc2626;
+  --err-text: #991b1b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0e1116;
+    --ink: #e8ebf2;
+    --ink-soft: #a3adc0;
+    --surface: #171a21;
+    --surface-muted: #1f242e;
+    --edge-subtle: #242b39;
+    --edge: #2a3140;
+    --edge-strong: #3a4356;
+    --faint: #6b7486;
+    --brand: #0ea371;
+    --brand-dark: #6ee7b7;
+    --brand-soft: #0a2e22;
+    --warn-bg: #2a2206;
+    --warn-edge: #4d3f10;
+    --warn-edge-strong: #5a4a12;
+    --warn-text: #fbbf24;
+    --warn-text-strong: #fcd34d;
+    --err-bg: #2f1414;
+    --err-edge: #5c2323;
+    --err-action: #f87171;
+    --err-text: #fca5a5;
+  }
+}
+
+/* Palette names below are remapped to scheme-aware vars; text-white and non-listed colors stay static. */
+@theme inline {
+  --color-paper: var(--page);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-surface: var(--surface);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-soft: var(--brand-soft);
+  --color-hero: #0c1222;
+  --color-zinc-50: var(--surface-muted);
+  --color-zinc-100: var(--edge-subtle);
+  --color-zinc-200: var(--edge);
+  --color-zinc-300: var(--edge-strong);
+  --color-zinc-400: var(--faint);
+  --color-amber-50: var(--warn-bg);
+  --color-amber-200: var(--warn-edge);
+  --color-amber-300: var(--warn-edge-strong);
+  --color-amber-700: var(--warn-text);
+  --color-amber-800: var(--warn-text-strong);
+  --color-red-50: var(--err-bg);
+  --color-red-200: var(--err-edge);
+  --color-red-600: var(--err-action);
+  --color-red-800: var(--err-text);
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }

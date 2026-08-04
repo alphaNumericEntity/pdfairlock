@@ -33,7 +33,7 @@ export function LicenseEntry() {
           value={key}
           onChange={(e) => setKey(e.target.value)}
           placeholder="Paste your license key"
-          className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm"
+          className="flex-1 rounded-lg border border-zinc-300 bg-surface px-3 py-2 text-sm"
         />
         <button
           type="button"

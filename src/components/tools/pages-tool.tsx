@@ -43,7 +43,7 @@ export function PagesTool({ mode }: { mode: "extract" | "delete" }) {
               value={ranges}
               onChange={(e) => setRanges(e.target.value)}
               placeholder="e.g. 1-3, 7, 12-14"
-              className="w-56 rounded-lg border border-zinc-300 bg-white px-3 py-2"
+              className="w-56 rounded-lg border border-zinc-300 bg-surface px-3 py-2"
             />
           </OptionRow>
           <RunButton

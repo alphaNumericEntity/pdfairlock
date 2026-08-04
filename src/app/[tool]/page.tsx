@@ -57,7 +57,7 @@ export default async function ToolPage({ params }: { params: Promise<{ tool: str
         <ToolBody slug={meta.slug} />
       </div>
 
-      <section className="mt-14 rounded-2xl border border-zinc-200 bg-white p-6">
+      <section className="mt-14 rounded-2xl border border-zinc-200 bg-surface p-6">
         <p className="flex items-center gap-2 font-semibold">
           <WifiOffIcon className="h-5 w-5 text-brand" /> Don&apos;t trust us — test us
         </p>
@@ -89,7 +89,7 @@ export default async function ToolPage({ params }: { params: Promise<{ tool: str
             <li key={t.slug}>
               <Link
                 href={`/${t.slug}`}
-                className="inline-block rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-sm hover:border-brand hover:text-brand-dark"
+                className="inline-block rounded-full border border-zinc-300 bg-surface px-3 py-1.5 text-sm hover:border-brand hover:text-brand-dark"
               >
                 {t.shortName}
               </Link>

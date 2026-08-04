@@ -43,7 +43,7 @@ export function PdfToImagesTool() {
             <select
               value={dpi}
               onChange={(e) => setDpi(Number(e.target.value))}
-              className="rounded-lg border border-zinc-300 bg-white px-3 py-2"
+              className="rounded-lg border border-zinc-300 bg-surface px-3 py-2"
             >
               <option value={72}>72 DPI — screen</option>
               <option value={150}>150 DPI — sharp</option>

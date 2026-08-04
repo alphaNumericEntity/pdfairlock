@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   description:
     "Merge, split, compress, redact and sign PDFs entirely in your browser. No uploads, no account, no tracking. Your files never leave your device.",
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/icon.svg", apple: "/apple-touch-icon.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

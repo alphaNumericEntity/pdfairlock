@@ -38,7 +38,7 @@ export default function Home() {
           </Link>
           <Link
             href="/redact-pdf"
-            className="rounded-xl border border-zinc-300 bg-white px-6 py-3 font-medium hover:border-brand"
+            className="rounded-xl border border-zinc-300 bg-surface px-6 py-3 font-medium hover:border-brand"
           >
             Redact a document
           </Link>
@@ -53,7 +53,7 @@ export default function Home() {
             <li key={t.slug}>
               <Link
                 href={`/${t.slug}`}
-                className="block h-full rounded-2xl border border-zinc-200 bg-white p-5 transition-colors hover:border-brand"
+                className="block h-full rounded-2xl border border-zinc-200 bg-surface p-5 transition-colors hover:border-brand"
               >
                 <p className="flex items-center justify-between font-semibold">
                   {t.name}
@@ -71,14 +71,14 @@ export default function Home() {
       </section>
 
       <section className="py-16">
-        <div className="rounded-3xl bg-ink px-6 py-12 text-white sm:px-12">
+        <div className="rounded-3xl bg-hero px-6 py-12 text-white sm:px-12">
           <div className="flex items-start gap-4">
             <ShieldIcon className="mt-1 h-8 w-8 shrink-0 text-emerald-400" />
             <div>
               <h2 className="text-2xl font-bold">
                 Why &ldquo;private&rdquo; actually means something here
               </h2>
-              <p className="mt-3 max-w-3xl leading-relaxed text-zinc-300">
+              <p className="mt-3 max-w-3xl leading-relaxed text-slate-300">
                 Every popular PDF site works by uploading your document to their server. Their
                 privacy is a policy — a promise that could change or be breached. Ours is an
                 architecture: this site is static files plus your browser. There is no endpoint that
@@ -99,7 +99,7 @@ export default function Home() {
       <section className="pb-16">
         <h2 className="text-2xl font-bold">AirgapPDF vs. the upload-everything sites</h2>
         <div className="mt-6 overflow-x-auto">
-          <table className="w-full min-w-[560px] border-collapse overflow-hidden rounded-2xl border border-zinc-200 bg-white text-sm">
+          <table className="w-full min-w-[560px] border-collapse overflow-hidden rounded-2xl border border-zinc-200 bg-surface text-sm">
             <thead>
               <tr className="bg-zinc-50 text-left">
                 <th className="px-4 py-3 font-medium" />

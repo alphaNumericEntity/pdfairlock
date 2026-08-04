@@ -1,4 +1,4 @@
-const CACHE = "airgap-v1";
+const CACHE = "airgap-v2";
 
 self.addEventListener("install", () => self.skipWaiting());
 

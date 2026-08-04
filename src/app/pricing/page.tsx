@@ -14,7 +14,7 @@ const TIERS = [
     name: "Free",
     price: "$0",
     note: "forever",
-    features: ["All 12 tools", "No account, no limits on files", "Works offline"],
+    features: ["All 14 tools", "No account, no limits on files", "Works offline"],
   },
   {
     name: "Pro",
@@ -59,7 +59,7 @@ export default function PricingPage() {
         {TIERS.map((tier) => (
           <div
             key={tier.name}
-            className={`rounded-2xl border bg-white p-6 ${
+            className={`rounded-2xl border bg-surface p-6 ${
               tier.highlight ? "border-brand shadow-md" : "border-zinc-200"
             }`}
           >
