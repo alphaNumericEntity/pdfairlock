@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { downloadBytes } from "@/lib/download";
 import { formatBytes } from "@/lib/pdf/ranges";
 import type { Progress } from "@/lib/pdf/types";
+import { runOp } from "@/lib/worker/client";
 import { FileIcon, ShieldIcon } from "./icons";
 
 const WARN_BYTES = 200 * 1024 * 1024;
@@ -60,7 +61,7 @@ export function FileDrop({
           handle(e.dataTransfer.files);
         }}
         className={`flex w-full flex-col items-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 text-center transition-colors ${
-          dragging ? "border-brand bg-brand-soft" : "border-zinc-300 bg-white hover:border-brand"
+          dragging ? "border-brand bg-brand-soft" : "border-zinc-300 bg-surface hover:border-brand"
         }`}
       >
         <FileIcon className="h-10 w-10 text-brand" />
@@ -80,6 +81,64 @@ export function FileDrop({
       />
       {warning && <p className="mt-2 text-sm text-amber-700">{warning}</p>}
     </div>
+  );
+}
+
+export function FileListEditor({
+  files,
+  onChange,
+}: {
+  files: File[];
+  onChange: (next: File[]) => void;
+}) {
+  if (files.length === 0) return null;
+  const move = (i: number, dir: -1 | 1) => {
+    const next = [...files];
+    const j = i + dir;
+    if (j < 0 || j >= next.length) return;
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  };
+  return (
+    <ul className="space-y-2">
+      {files.map((f, i) => (
+        <li
+          // biome-ignore lint/suspicious/noArrayIndexKey: duplicate names allowed; items hold no state
+          key={`${f.name}-${i}`}
+          className="flex items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-surface px-4 py-2.5"
+        >
+          <span className="truncate text-sm">
+            {i + 1}. {f.name} <span className="text-xs text-ink-soft">({formatBytes(f.size)})</span>
+          </span>
+          <span className="flex gap-1">
+            <button
+              type="button"
+              onClick={() => move(i, -1)}
+              className="rounded px-2 py-1 text-sm hover:bg-zinc-100"
+              aria-label="Move up"
+            >
+              ↑
+            </button>
+            <button
+              type="button"
+              onClick={() => move(i, 1)}
+              className="rounded px-2 py-1 text-sm hover:bg-zinc-100"
+              aria-label="Move down"
+            >
+              ↓
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange(files.filter((_, j) => j !== i))}
+              className="rounded px-2 py-1 text-sm text-red-600 hover:bg-red-50"
+              aria-label="Remove"
+            >
+              ✕
+            </button>
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -132,7 +191,7 @@ export function ResultPanel({
         {results.map((r) => (
           <li
             key={r.name}
-            className="flex items-center justify-between gap-3 rounded-lg bg-white px-4 py-2.5"
+            className="flex items-center justify-between gap-3 rounded-lg bg-surface px-4 py-2.5"
           >
             <span className="truncate text-sm">{r.name}</span>
             <span className="flex items-center gap-3">
@@ -151,9 +210,25 @@ export function ResultPanel({
         ))}
       </ul>
       {note && <p className="text-sm text-ink-soft">{note}</p>}
-      <button type="button" onClick={onReset} className="text-sm text-brand-dark underline">
-        Start over
-      </button>
+      <div className="flex items-center gap-4">
+        {results.length > 1 && (
+          <button
+            type="button"
+            onClick={async () => {
+              const zip = await runOp<Uint8Array>("zipFiles", [
+                results.map((r) => ({ name: r.name, bytes: r.bytes })),
+              ]);
+              downloadBytes(zip, "airgap-pdf-batch.zip", "application/zip");
+            }}
+            className="rounded-lg border border-brand px-3 py-1.5 text-sm font-medium text-brand-dark hover:bg-surface"
+          >
+            Download all as .zip
+          </button>
+        )}
+        <button type="button" onClick={onReset} className="text-sm text-brand-dark underline">
+          Start over
+        </button>
+      </div>
     </div>
   );
 }

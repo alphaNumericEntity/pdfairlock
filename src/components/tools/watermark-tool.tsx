@@ -7,6 +7,7 @@ import { runOp } from "@/lib/worker/client";
 import {
   ErrorNote,
   FileDrop,
+  FileListEditor,
   OptionRow,
   ProgressBar,
   ResultPanel,
@@ -15,43 +16,36 @@ import {
 } from "../tool-ui";
 
 export function WatermarkTool({ mode }: { mode: "watermark" | "page-numbers" }) {
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [text, setText] = useState("CONFIDENTIAL");
   const [color, setColor] = useState<"gray" | "red">("gray");
   const { busy, progress, error, results, run, reset } = useToolRunner();
 
   return (
     <div className="space-y-5">
-      {!file && (
-        <FileDrop
-          accept="application/pdf"
-          multiple={false}
-          onFiles={(f) => setFile(f[0])}
-          label={`Choose a PDF to ${mode === "watermark" ? "watermark" : "number"}`}
-        />
-      )}
-      {file && (
+      <FileDrop
+        accept="application/pdf"
+        multiple
+        onFiles={(f) => setFiles((prev) => [...prev, ...f])}
+        label={`Choose PDFs to ${mode === "watermark" ? "watermark" : "number"}`}
+      />
+      <FileListEditor files={files} onChange={setFiles} />
+      {files.length > 0 && (
         <>
-          <p className="text-sm">
-            <span className="font-medium">{file.name}</span>{" "}
-            <button type="button" className="text-brand underline" onClick={() => setFile(null)}>
-              change
-            </button>
-          </p>
           {mode === "watermark" && (
             <>
               <OptionRow label="Watermark text">
                 <input
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  className="w-64 rounded-lg border border-zinc-300 bg-white px-3 py-2"
+                  className="w-64 rounded-lg border border-zinc-300 bg-surface px-3 py-2"
                 />
               </OptionRow>
               <OptionRow label="Color">
                 <select
                   value={color}
                   onChange={(e) => setColor(e.target.value as "gray" | "red")}
-                  className="rounded-lg border border-zinc-300 bg-white px-3 py-2"
+                  className="rounded-lg border border-zinc-300 bg-surface px-3 py-2"
                 >
                   <option value="gray">Gray</option>
                   <option value="red">Red</option>
@@ -63,21 +57,28 @@ export function WatermarkTool({ mode }: { mode: "watermark" | "page-numbers" }) 
             busy={busy}
             disabled={mode === "watermark" && text.trim().length === 0}
             onClick={() =>
-              run(async () => {
-                const bytes = await fileToBytes(file);
-                const out =
-                  mode === "watermark"
-                    ? await runOp<Uint8Array>("watermarkPdf", [
-                        bytes,
-                        { text: text.trim(), fontSize: 60, opacity: 0.25, rotate: 40, color },
-                      ])
-                    : await runOp<Uint8Array>("addPageNumbers", [bytes]);
-                const suffix = mode === "watermark" ? "watermarked" : "numbered";
-                return [{ name: `${stem(file.name)}-${suffix}.pdf`, bytes: out }];
+              run(async (report) => {
+                const out = [];
+                for (let i = 0; i < files.length; i++) {
+                  const file = files[i];
+                  const bytes = await fileToBytes(file);
+                  const processed =
+                    mode === "watermark"
+                      ? await runOp<Uint8Array>("watermarkPdf", [
+                          bytes,
+                          { text: text.trim(), fontSize: 60, opacity: 0.25, rotate: 40, color },
+                        ])
+                      : await runOp<Uint8Array>("addPageNumbers", [bytes]);
+                  const suffix = mode === "watermark" ? "watermarked" : "numbered";
+                  out.push({ name: `${stem(file.name)}-${suffix}.pdf`, bytes: processed });
+                  report({ done: i + 1, total: files.length, label: file.name });
+                }
+                return out;
               })
             }
           >
             {mode === "watermark" ? "Add watermark" : "Add page numbers"}
+            {files.length > 1 ? ` to ${files.length} PDFs` : ""}
           </RunButton>
         </>
       )}
@@ -87,7 +88,7 @@ export function WatermarkTool({ mode }: { mode: "watermark" | "page-numbers" }) 
         results={results}
         onReset={() => {
           reset();
-          setFile(null);
+          setFiles([]);
         }}
       />
     </div>
