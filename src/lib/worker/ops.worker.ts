@@ -1,6 +1,7 @@
 import {
   addPageNumbers,
   assembleFromPageImages,
+  assembleMixed,
   cleanResave,
   deletePages,
   extractPages,
@@ -24,6 +25,7 @@ const handlers: Record<string, (...args: never[]) => unknown> = {
   addPageNumbers,
   imagesToPdf,
   assembleFromPageImages,
+  assembleMixed,
   cleanResave,
   pageCount,
   zipFiles,

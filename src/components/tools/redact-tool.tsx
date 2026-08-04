@@ -5,7 +5,12 @@ import { useRef, useState } from "react";
 import { fileToBytes } from "@/lib/download";
 import { openPdf, renderPage, searchText } from "@/lib/pdf/pdfjs";
 import { stem } from "@/lib/pdf/ranges";
-import { type RedactionReport, redactRasterize, verifyRedaction } from "@/lib/pdf/redact";
+import {
+  type RedactionReport,
+  type RedactMode,
+  redactPdf,
+  verifyRedaction,
+} from "@/lib/pdf/redact";
 import type { RedactBox } from "@/lib/pdf/types";
 import {
   ErrorNote,
@@ -29,6 +34,7 @@ export function RedactTool() {
   const [searchBusy, setSearchBusy] = useState(false);
   const [searchMsg, setSearchMsg] = useState<string | null>(null);
   const [draft, setDraft] = useState<DraftBox | null>(null);
+  const [mode, setMode] = useState<RedactMode>("mixed");
   const [report, setReport] = useState<RedactionReport | null>(null);
 
   const pageCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -105,7 +111,7 @@ export function RedactTool() {
 
   return (
     <div className="space-y-5">
-      <p className="rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm text-ink-soft">
+      <p className="rounded-lg border border-zinc-200 bg-surface px-4 py-3 text-sm text-ink-soft">
         Redacted pages are rebuilt as flat images — the underlying text is destroyed, not hidden.
         The output is then re-scanned and you get a verification report. Always review the result
         before distributing it.
@@ -128,7 +134,7 @@ export function RedactTool() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && runSearch()}
               placeholder="e.g. a name, SSN, email"
-              className="w-64 rounded-lg border border-zinc-300 bg-white px-3 py-2"
+              className="w-64 rounded-lg border border-zinc-300 bg-surface px-3 py-2"
             />
           </label>
           <button
@@ -247,6 +253,18 @@ export function RedactTool() {
           </div>
         </div>
 
+        <label className="flex flex-wrap items-center gap-3 text-sm">
+          <span className="font-medium">Mode</span>
+          <select
+            value={mode}
+            onChange={(e) => setMode(e.target.value as RedactMode)}
+            className="rounded-lg border border-zinc-300 bg-surface px-3 py-2"
+          >
+            <option value="mixed">Rebuild only redacted pages (keeps text elsewhere)</option>
+            <option value="flatten">Flatten entire document (every page becomes an image)</option>
+          </select>
+        </label>
+
         <RunButton
           busy={busy}
           disabled={boxes.length === 0}
@@ -255,11 +273,10 @@ export function RedactTool() {
               if (!file) return [];
               setReport(null);
               const bytes = await fileToBytes(file);
-              const out = await redactRasterize(bytes, boxes, reportProgress);
+              const { output, redactedPages } = await redactPdf(bytes, boxes, mode, reportProgress);
               reportProgress({ done: 1, total: 1, label: "Verifying redaction" });
-              const redactedPages = [...new Set(boxes.map((b) => b.page))].sort((a, b) => a - b);
-              setReport(await verifyRedaction(out, redactedPages, terms));
-              return [{ name: `${stem(file.name)}-redacted.pdf`, bytes: out }];
+              setReport(await verifyRedaction(output, mode, redactedPages, terms));
+              return [{ name: `${stem(file.name)}-redacted.pdf`, bytes: output }];
             })
           }
         >
@@ -278,22 +295,36 @@ export function RedactTool() {
         >
           <p className="font-semibold">{report.ok ? "✓ Redaction verified" : "⚠ Review needed"}</p>
           <p>
-            {report.textObjectsInOutput === 0
-              ? "✓ Output contains zero extractable text objects."
-              : `⚠ Output still contains text on ${report.textObjectsInOutput} page(s) — unexpected; do not distribute without review.`}
+            {report.textOnRedactedPages.length === 0
+              ? "✓ Redacted pages contain zero extractable text."
+              : `⚠ Text still extractable on redacted page(s) ${report.textOnRedactedPages.join(", ")} — do not distribute without review.`}
           </p>
-          <p>
-            {report.termsFoundInOutput.length === 0
-              ? terms.length > 0
-                ? "✓ None of your search terms appear anywhere in the output file."
-                : "· No search terms to verify (boxes drawn manually)."
-              : `⚠ Terms still present: ${report.termsFoundInOutput.join(", ")}`}
-          </p>
+          {terms.length === 0 ? (
+            <p>· No search terms to verify (boxes drawn manually).</p>
+          ) : Object.keys(report.termHitsByPage).length === 0 &&
+            report.termsInBytes.length === 0 ? (
+            <p>✓ None of your search terms appear anywhere in the output.</p>
+          ) : (
+            <>
+              {Object.entries(report.termHitsByPage).map(([term, pages]) => (
+                <p key={term}>
+                  ⚠ &ldquo;{term}&rdquo; still appears on page{pages.length === 1 ? "" : "s"}{" "}
+                  {pages.join(", ")} — add a box there and run again.
+                </p>
+              ))}
+              {report.termsInBytes.length > 0 && (
+                <p>
+                  ⚠ Found in raw file bytes (not visible text): {report.termsInBytes.join(", ")} —
+                  use Flatten mode for maximum assurance.
+                </p>
+              )}
+            </>
+          )}
           <p>✓ Document metadata (title, author, XMP) stripped.</p>
           <p className="text-ink-soft">
-            Pages rebuilt: {report.redactedPages.join(", ")} of {numPages}. All pages were
-            re-rendered; unredacted pages keep their appearance but also lose their text layer in
-            this mode.
+            {report.mode === "mixed"
+              ? `Pages rebuilt as images: ${report.redactedPages.join(", ")} of ${numPages}. All other pages are untouched and keep their selectable text.`
+              : `All ${numPages} pages were flattened to images; the whole document's text layer is gone.`}
           </p>
         </div>
       )}

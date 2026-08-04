@@ -9,7 +9,7 @@ async function load(bytes: Uint8Array): Promise<PDFDocument> {
     const msg = String(err instanceof Error ? err.message : err);
     if (msg.toLowerCase().includes("encrypt")) {
       throw new Error(
-        "This PDF is password-protected. Remove the password first (password tools are on our roadmap).",
+        "This PDF is password-protected. Use the Unlock PDF tool first, then come back.",
       );
     }
     throw new Error("Could not read this file as a PDF. It may be corrupted.");
@@ -144,6 +144,23 @@ export async function imagesToPdf(
   return doc.save();
 }
 
+function stripMetadata(doc: PDFDocument): void {
+  doc.setTitle("");
+  doc.setAuthor("");
+  doc.setSubject("");
+  doc.setKeywords([]);
+  doc.setProducer("");
+  doc.setCreator("");
+  doc.catalog.delete(PDFName.of("Metadata"));
+}
+
+async function addImagePage(doc: PDFDocument, image: ImagePage): Promise<void> {
+  const embedded =
+    image.format === "jpeg" ? await doc.embedJpg(image.bytes) : await doc.embedPng(image.bytes);
+  const page = doc.addPage([image.widthPt, image.heightPt]);
+  page.drawImage(embedded, { x: 0, y: 0, width: image.widthPt, height: image.heightPt });
+}
+
 export async function assembleFromPageImages(
   pages: ImagePage[],
   meta: { stripMetadata: boolean },
@@ -152,22 +169,34 @@ export async function assembleFromPageImages(
   const doc = await PDFDocument.create();
   let done = 0;
   for (const p of pages) {
-    const embedded =
-      p.format === "jpeg" ? await doc.embedJpg(p.bytes) : await doc.embedPng(p.bytes);
-    const page = doc.addPage([p.widthPt, p.heightPt]);
-    page.drawImage(embedded, { x: 0, y: 0, width: p.widthPt, height: p.heightPt });
+    await addImagePage(doc, p);
     onProgress?.(++done, pages.length);
   }
-  if (meta.stripMetadata) {
-    doc.setTitle("");
-    doc.setAuthor("");
-    doc.setSubject("");
-    doc.setKeywords([]);
-    doc.setProducer("");
-    doc.setCreator("");
-    doc.catalog.delete(PDFName.of("Metadata"));
-  }
+  if (meta.stripMetadata) stripMetadata(doc);
   return doc.save();
+}
+
+export async function assembleMixed(
+  originalBytes: Uint8Array,
+  replacements: { pageIndex: number; image: ImagePage }[],
+  onProgress?: (done: number, total: number) => void,
+): Promise<Uint8Array> {
+  const src = await load(originalBytes);
+  const out = await PDFDocument.create();
+  const byIndex = new Map(replacements.map((r) => [r.pageIndex, r.image]));
+  const total = src.getPageCount();
+  for (let i = 0; i < total; i++) {
+    const image = byIndex.get(i);
+    if (image) {
+      await addImagePage(out, image);
+    } else {
+      const [copied] = await out.copyPages(src, [i]);
+      out.addPage(copied);
+    }
+    onProgress?.(i + 1, total);
+  }
+  stripMetadata(out);
+  return out.save();
 }
 
 export async function cleanResave(bytes: Uint8Array): Promise<Uint8Array> {
