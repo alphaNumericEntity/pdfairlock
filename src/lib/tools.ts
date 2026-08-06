@@ -6,7 +6,7 @@ export type ToolMeta = {
   metaTitle: string;
   metaDescription: string;
   accept: "pdf" | "pdf-multi" | "images";
-  pro?: boolean;
+  flagship?: boolean;
   faq: { q: string; a: string }[];
 };
 
@@ -129,7 +129,7 @@ export const TOOLS: ToolMeta[] = [
     metaDescription:
       "Permanently remove sensitive text from PDFs in your browser. Real redaction (not a black box overlay), verified after processing. No upload — ever.",
     accept: "pdf",
-    pro: true,
+    flagship: true,
     faq: [
       {
         q: "How is this different from drawing a black rectangle?",

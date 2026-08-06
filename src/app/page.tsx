@@ -11,7 +11,7 @@ const COMPARISON = [
   { q: "Files uploaded to a server?", us: "Never", them: "Yes, every file" },
   { q: "Works offline / on a plane?", us: "Yes", them: "No" },
   { q: "Account required?", us: "No", them: "For most features" },
-  { q: "Pricing", us: "Free · one-time Pro", them: "$7–20 every month" },
+  { q: "Pricing", us: "Free — never a subscription", them: "$7–20 every month" },
   { q: "Verifiable privacy?", us: "Check the network tab", them: "Trust their policy" },
 ];
 
@@ -57,7 +57,7 @@ export default function Home() {
               >
                 <p className="flex items-center justify-between font-semibold">
                   {t.name}
-                  {t.pro && (
+                  {t.flagship && (
                     <span className="rounded-full bg-brand-soft px-2 py-0.5 text-xs font-medium text-brand-dark">
                       Flagship
                     </span>

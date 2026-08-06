@@ -1,4 +1,4 @@
-const CACHE = "airgap-v2";
+const CACHE = "airgap-v3";
 
 self.addEventListener("install", () => self.skipWaiting());
 
@@ -17,16 +17,17 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   event.respondWith(
-    caches.match(req).then(
-      (hit) =>
-        hit ||
-        fetch(req).then((res) => {
+    caches.match(req).then((hit) => {
+      const refresh = fetch(req)
+        .then((res) => {
           if (res.ok) {
             const copy = res.clone();
             caches.open(CACHE).then((c) => c.put(req, copy));
           }
           return res;
-        }),
-    ),
+        })
+        .catch(() => hit);
+      return hit || refresh;
+    }),
   );
 });
