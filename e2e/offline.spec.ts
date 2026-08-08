@@ -4,7 +4,12 @@ import { makePdf } from "./helpers";
 test("the wifi-off demo: after one visit, merging works fully offline", async ({
   page,
   context,
+  browserName,
 }) => {
+  test.skip(
+    browserName === "webkit",
+    "Playwright WebKit doesn't emulate SW+offline; verify in real Safari post-deploy",
+  );
   await page.goto("/merge-pdf");
   await page.waitForFunction(() => navigator.serviceWorker?.controller != null, undefined, {
     timeout: 15_000,

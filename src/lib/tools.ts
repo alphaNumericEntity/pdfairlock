@@ -137,7 +137,7 @@ export const TOOLS: ToolMeta[] = [
       },
       {
         q: "What does the verification report check?",
-        a: "Three things: the output pages contain zero extractable text objects, your redacted search terms do not appear anywhere in the output file's bytes, and document metadata (author, title, XMP) has been stripped.",
+        a: "Three things: redacted pages contain zero extractable text, your search terms no longer appear anywhere in the document — if one survives on a page you didn't mark, the report names that page — and document metadata (author, title, XMP) has been stripped.",
       },
       {
         q: "Is redacting confidential documents in a browser safe?",

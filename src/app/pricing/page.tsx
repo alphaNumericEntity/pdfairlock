@@ -26,10 +26,10 @@ export default function PricingPage() {
         <p className="font-semibold">What happens after beta?</p>
         <p className="mt-2 leading-relaxed text-ink-soft">
           At some point we&apos;ll introduce paid licenses for advanced features. Two promises we
-          can already make: it will be a <strong>one-time purchase, never a subscription</strong> —
-          we don&apos;t run servers to process your files, so we don&apos;t need to charge you rent
-          — and people who used AirgapPDF during the beta will get a launch discount. Pricing will
-          be announced on this page.
+          can already make: it will be a <strong>one-time purchase, never a subscription</strong>
+          {" — "}we don&apos;t run servers to process your files, so we don&apos;t need to charge
+          you rent — and people who used AirgapPDF during the beta will get a launch discount.
+          Pricing will be announced on this page.
         </p>
       </div>
 

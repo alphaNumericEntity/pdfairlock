@@ -12,10 +12,10 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-ink-soft">
-          <Link href="/#tools" className="hover:text-ink">
+          <Link href="/#tools" className="hidden hover:text-ink sm:inline">
             Tools
           </Link>
-          <Link href="/privacy" className="hover:text-ink">
+          <Link href="/privacy" className="hidden hover:text-ink sm:inline">
             Why it&apos;s private
           </Link>
           <Link
