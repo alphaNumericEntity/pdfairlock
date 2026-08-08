@@ -7,6 +7,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/build-worker.mjs",
     "build": "next build",
+    "postbuild": "node scripts/gen-precache.mjs",
     "postinstall": "node scripts/copy-pdf-worker.mjs && node scripts/build-worker.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",

@@ -40,4 +40,20 @@ describe("verifyLicenseKey", () => {
     expect(await verifyLicenseKey("", "AAAA")).toBeNull();
     expect(await verifyLicenseKey("a.b.c", "AAAA")).toBeNull();
   });
+
+  it("rejects a correctly signed payload that is missing required fields", async () => {
+    const priv = ed.utils.randomPrivateKey();
+    const pub = await ed.getPublicKeyAsync(priv);
+    const key = await makeKey({ seats: 1 }, priv);
+    expect(await verifyLicenseKey(key, b64url(pub))).toBeNull();
+  });
+
+  it("rejects a signed payload that isn't JSON", async () => {
+    const priv = ed.utils.randomPrivateKey();
+    const pub = await ed.getPublicKeyAsync(priv);
+    const payloadBytes = new TextEncoder().encode("not json at all");
+    const sig = await ed.signAsync(payloadBytes, priv);
+    const key = `${b64url(payloadBytes)}.${b64url(sig)}`;
+    expect(await verifyLicenseKey(key, b64url(pub))).toBeNull();
+  });
 });

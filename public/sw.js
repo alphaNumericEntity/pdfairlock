@@ -1,6 +1,18 @@
-const CACHE = "airgap-v3";
+const CACHE = "airgap-v5";
+try {
+  importScripts("/precache-manifest.js");
+} catch {
+  self.__PRECACHE = ["/ops.worker.js", "/qpdf.worker.js", "/qpdf.wasm", "/pdf.worker.min.mjs"];
+}
 
-self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches
+      .open(CACHE)
+      .then((c) => c.addAll(self.__PRECACHE))
+      .then(() => self.skipWaiting()),
+  );
+});
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(

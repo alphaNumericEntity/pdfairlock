@@ -43,4 +43,15 @@ describe("qpdf password tools", () => {
     const original = await makePdf();
     await expect(qpdf.unlock(original, "whatever")).rejects.toThrow(/isn't password-protected/i);
   });
+
+  it("roundtrips a password with spaces and symbols", async () => {
+    const password = "p@ss word! & <chars> #42";
+    const protectedBytes = await qpdf.protect(await makePdf(), password);
+    const unlocked = await qpdf.unlock(protectedBytes, password);
+    expect((await PDFDocument.load(unlocked)).getPageCount()).toBe(2);
+  });
+
+  it("rejects garbage input bytes with a friendly error", async () => {
+    await expect(qpdf.protect(new Uint8Array([1, 2, 3]), "pw")).rejects.toThrow(/could not/i);
+  });
 });
