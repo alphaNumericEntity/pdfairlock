@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
 import { TOOLS } from "@/lib/tools";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://airgappdf.com";
+  const base = SITE_URL;
   return [
     { url: base, priority: 1 },
     { url: `${base}/privacy`, priority: 0.6 },

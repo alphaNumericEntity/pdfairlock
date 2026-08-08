@@ -2,16 +2,26 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { SwRegister } from "@/components/sw-register";
+import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://airgappdf.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "AirgapPDF — PDF tools that work with your wifi off",
-    template: "%s · AirgapPDF",
+    default: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    template: `%s · ${SITE_NAME}`,
   },
   description:
     "Merge, split, compress, redact and sign PDFs entirely in your browser. No uploads, no account, no tracking. Your files never leave your device.",
   icons: { icon: "/icon.svg", apple: "/apple-touch-icon.png" },
+  openGraph: {
+    siteName: SITE_NAME,
+    type: "website",
+    images: ["/og.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
