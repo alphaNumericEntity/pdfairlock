@@ -37,7 +37,7 @@ export async function verifyLicenseKey(
   }
 }
 
-const STORAGE_KEY = "airgap-license";
+const STORAGE_KEY = "pdfairlock-license";
 
 export function storeLicense(key: string): void {
   localStorage.setItem(STORAGE_KEY, key);

@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Why your files never leave your device — and how to verify it",
   description:
-    "AirgapPDF processes every file inside your browser. No uploads, no analytics, no cookies. Here's exactly how that works and how to check it yourself in 30 seconds.",
+    "PDFAirlock processes every file inside your browser. No uploads, no analytics, no cookies. Here's exactly how that works and how to check it yourself in 30 seconds.",
   alternates: { canonical: "/privacy" },
 };
 

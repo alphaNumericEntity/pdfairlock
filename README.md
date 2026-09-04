@@ -1,4 +1,4 @@
-# AirgapPDF
+# PDFAirlock
 
 PDF tools that work with your wifi off. Merge, split, compress, redact, sign, convert — 100% in your browser. Files never leave your device.
 

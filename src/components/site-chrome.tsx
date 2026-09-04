@@ -8,7 +8,7 @@ export function SiteHeader() {
         <Link href="/" className="flex items-center gap-2 font-semibold text-lg">
           <Logo className="h-7 w-7" />
           <span>
-            Airgap<span className="text-brand">PDF</span>
+            PDF<span className="text-brand">Airlock</span>
           </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-ink-soft">
@@ -37,7 +37,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-6 sm:flex-row sm:justify-between">
           <div className="max-w-md space-y-2">
             <div className="flex items-center gap-2 font-semibold text-ink">
-              <Logo className="h-5 w-5" /> AirgapPDF
+              <Logo className="h-5 w-5" /> PDFAirlock
             </div>
             <p>
               Every tool on this site runs entirely in your browser. Your files never leave your
@@ -66,7 +66,7 @@ export function SiteFooter() {
           </nav>
         </div>
         <p className="mt-8 text-xs text-zinc-400">
-          © {new Date().getFullYear()} AirgapPDF. Software provided as-is; verify output before
+          © {new Date().getFullYear()} PDFAirlock. Software provided as-is; verify output before
           distributing sensitive documents.
         </p>
       </div>

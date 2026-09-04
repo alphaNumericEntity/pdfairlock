@@ -6,7 +6,7 @@ import { createCanvas, Path2D } from "@napi-rs/canvas";
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const src = readFileSync(join(root, "src/lib/site.ts"), "utf8");
 const site = {
-  name: src.match(/SITE_NAME = "([^"]+)"/)?.[1] ?? "AirgapPDF",
+  name: src.match(/SITE_NAME = "([^"]+)"/)?.[1] ?? "PDFAirlock",
   tagline: src.match(/SITE_TAGLINE = "([^"]+)"/)?.[1] ?? "",
 };
 

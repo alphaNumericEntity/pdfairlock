@@ -133,7 +133,7 @@ export const TOOLS: ToolMeta[] = [
     faq: [
       {
         q: "How is this different from drawing a black rectangle?",
-        a: "Most tools draw a black box over the text — the text is still in the file and can be copied out. This has caused real legal scandals. AirgapPDF rebuilds redacted pages so the underlying text ceases to exist, then re-scans the output to prove it and shows you the verification report.",
+        a: "Most tools draw a black box over the text — the text is still in the file and can be copied out. This has caused real legal scandals. PDFAirlock rebuilds redacted pages so the underlying text ceases to exist, then re-scans the output to prove it and shows you the verification report.",
       },
       {
         q: "What does the verification report check?",

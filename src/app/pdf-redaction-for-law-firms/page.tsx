@@ -28,7 +28,7 @@ export default function LawFirmsPage() {
             In a PDF, drawing a black shape over text doesn&apos;t remove the text — it sits in the
             file underneath, one copy-paste away. Court filings redacted this way have been
             unredacted by journalists and opposing counsel with nothing more than select-all. Proper
-            redaction must rewrite the document so the content ceases to exist. AirgapPDF rebuilds
+            redaction must rewrite the document so the content ceases to exist. PDFAirlock rebuilds
             redacted pages from pixels: after processing, there is no text object left to extract on
             those pages.
           </p>

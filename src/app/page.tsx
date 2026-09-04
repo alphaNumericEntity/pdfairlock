@@ -97,13 +97,13 @@ export default function Home() {
       </section>
 
       <section className="pb-16">
-        <h2 className="text-2xl font-bold">AirgapPDF vs. the upload-everything sites</h2>
+        <h2 className="text-2xl font-bold">PDFAirlock vs. the upload-everything sites</h2>
         <div className="mt-6 overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse overflow-hidden rounded-2xl border border-zinc-200 bg-surface text-sm">
             <thead>
               <tr className="bg-zinc-50 text-left">
                 <th className="px-4 py-3 font-medium" />
-                <th className="px-4 py-3 font-semibold text-brand-dark">AirgapPDF</th>
+                <th className="px-4 py-3 font-semibold text-brand-dark">PDFAirlock</th>
                 <th className="px-4 py-3 font-medium text-ink-soft">Typical PDF site</th>
               </tr>
             </thead>

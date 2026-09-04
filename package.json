@@ -1,5 +1,5 @@
 {
-  "name": "airgap-pdf",
+  "name": "pdfairlock",
   "version": "0.1.0",
   "private": true,
   "scripts": {

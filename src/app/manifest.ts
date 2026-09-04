@@ -4,8 +4,8 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "AirgapPDF — private PDF tools",
-    short_name: "AirgapPDF",
+    name: "PDFAirlock — private PDF tools",
+    short_name: "PDFAirlock",
     description: "PDF tools that work with your wifi off. Files never leave your device.",
     start_url: "/",
     display: "standalone",

@@ -1,4 +1,4 @@
-const CACHE = "airgap-v5";
+const CACHE = "pdfairlock-v6";
 try {
   importScripts("/precache-manifest.js");
 } catch {

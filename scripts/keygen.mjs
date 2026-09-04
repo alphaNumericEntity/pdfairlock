@@ -10,9 +10,9 @@ if (mode === "keypair") {
   console.log("PRIVATE (keep in password manager, never in repo):", b64url(priv));
   console.log("PUBLIC  (paste into src/lib/license/keys.ts):", b64url(pub));
 } else if (mode === "sign") {
-  const priv = process.env.AIRGAP_LICENSE_PRIVATE_KEY;
+  const priv = process.env.PDFAIRLOCK_LICENSE_PRIVATE_KEY;
   if (!priv) {
-    console.error("Set AIRGAP_LICENSE_PRIVATE_KEY env var");
+    console.error("Set PDFAIRLOCK_LICENSE_PRIVATE_KEY env var");
     process.exit(1);
   }
   const sku = process.argv[3] ?? "pro";

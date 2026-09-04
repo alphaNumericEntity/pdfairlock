@@ -40,7 +40,7 @@ test("every tool page serves canonical + FAQ JSON-LD + privacy badge", async ({ 
     const res = await request.get(`/${slug}`);
     expect(res.status(), slug).toBe(200);
     const html = await res.text();
-    expect(html, slug).toContain(`rel="canonical" href="https://airgappdf.com/${slug}"`);
+    expect(html, slug).toContain(`rel="canonical" href="https://pdfairlock.com/${slug}"`);
     expect(html, slug).toContain('"@type":"FAQPage"');
     expect(html, slug).toContain("nothing is uploaded");
   }
@@ -51,7 +51,7 @@ test("sitemap lists every page", async ({ request }) => {
   const locs = xml.match(/<loc>/g) ?? [];
   expect(locs.length).toBe(TOOL_SLUGS.length + 5);
   for (const slug of TOOL_SLUGS) {
-    expect(xml).toContain(`https://airgappdf.com/${slug}`);
+    expect(xml).toContain(`https://pdfairlock.com/${slug}`);
   }
 });
 

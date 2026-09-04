@@ -218,7 +218,7 @@ export function ResultPanel({
               const zip = await runOp<Uint8Array>("zipFiles", [
                 results.map((r) => ({ name: r.name, bytes: r.bytes })),
               ]);
-              downloadBytes(zip, "airgap-pdf-batch.zip", "application/zip");
+              downloadBytes(zip, "pdfairlock-batch.zip", "application/zip");
             }}
             className="rounded-lg border border-brand px-3 py-1.5 text-sm font-medium text-brand-dark hover:bg-surface"
           >

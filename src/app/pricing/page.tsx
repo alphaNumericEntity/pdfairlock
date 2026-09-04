@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Pricing — everything is free during beta",
   description:
-    "All AirgapPDF tools are completely free while we're in beta. Paid licenses will be one-time purchases — never a subscription — and will be announced here.",
+    "All PDFAirlock tools are completely free while we're in beta. Paid licenses will be one-time purchases — never a subscription — and will be announced here.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -28,7 +28,7 @@ export default function PricingPage() {
           At some point we&apos;ll introduce paid licenses for advanced features. Two promises we
           can already make: it will be a <strong>one-time purchase, never a subscription</strong>
           {" — "}we don&apos;t run servers to process your files, so we don&apos;t need to charge
-          you rent — and people who used AirgapPDF during the beta will get a launch discount.
+          you rent — and people who used PDFAirlock during the beta will get a launch discount.
           Pricing will be announced on this page.
         </p>
       </div>
