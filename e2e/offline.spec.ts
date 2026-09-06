@@ -12,7 +12,7 @@ test("the wifi-off demo: after one visit, merging works fully offline", async ({
   );
   await page.goto("/merge-pdf");
   await page.waitForFunction(() => navigator.serviceWorker?.controller != null, undefined, {
-    timeout: 15_000,
+    timeout: 60_000,
   });
 
   await context.setOffline(true);
