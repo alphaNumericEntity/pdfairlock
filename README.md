@@ -2,7 +2,9 @@
 
 PDF tools that work with your wifi off. Merge, split, compress, redact, sign, convert — 100% in your browser. Files never leave your device.
 
-**Read [DESIGN.md](./DESIGN.md) first** — product rationale, architecture, monetization, GTM, roadmap.
+**Read [DESIGN.md](./DESIGN.md) first** — product rationale, monetization, GTM, roadmap, dated decision log.
+
+Technical deep-dives in `docs/`: [ARCHITECTURE](./docs/ARCHITECTURE.md) (how it works, engine choices) · [REDACTION](./docs/REDACTION.md) (the flagship, exactly what the verifier proves) · [PRIVACY-MODEL](./docs/PRIVACY-MODEL.md) (the claim, enforcement layers, threat-model boundaries) · [TESTING](./docs/TESTING.md) (the 104-test verification machinery and what production runs caught) · [LAUNCH](./docs/LAUNCH.md) (launch kit).
 
 ## Quickstart
 
