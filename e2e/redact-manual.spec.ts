@@ -18,6 +18,10 @@ async function dragBox(
   to: { x: number; y: number },
 ) {
   const canvas = page.locator("canvas").first();
+  await page.waitForFunction(() => {
+    const el = document.querySelector("canvas");
+    return el instanceof HTMLCanvasElement && el.width > 300;
+  });
   await canvas.scrollIntoViewIfNeeded();
   const box = await canvas.boundingBox();
   if (!box) throw new Error("page canvas not visible");
