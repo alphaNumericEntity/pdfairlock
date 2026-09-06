@@ -1,6 +1,8 @@
 # PDFAirlock
 
-PDF tools that work with your wifi off. Merge, split, compress, redact, sign, convert — 100% in your browser. Files never leave your device.
+**Live: https://pdfairlock.com** — PDF tools that work with your wifi off. Merge, split, compress, redact, sign, convert — 100% in your browser. Files never leave your device.
+
+Pushing to `main` deploys production. Operational details (repo access, deploy pipeline, domain/DNS, release gate, instrumentation): [docs/OPERATIONS.md](./docs/OPERATIONS.md).
 
 **Read [DESIGN.md](./DESIGN.md) first** — product rationale, monetization, GTM, roadmap, dated decision log.
 
