@@ -1,5 +1,8 @@
 {
+  "framework": null,
   "buildCommand": "pnpm run build",
+  "outputDirectory": "out",
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",
