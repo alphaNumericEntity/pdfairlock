@@ -137,6 +137,11 @@ export default function ComparePage() {
       <section className="mt-12 space-y-10">
         <div>
           <h2 className="text-xl font-semibold">PDFAirlock vs iLovePDF</h2>
+          <p className="mt-1 text-sm">
+            <Link href="/ilovepdf-alternative" className="font-medium text-brand underline">
+              Full breakdown: the iLovePDF alternative page →
+            </Link>
+          </p>
           <p className="mt-3 leading-relaxed text-ink-soft">
             iLovePDF is the giant of the category: more tools than us (including OCR and conversions
             to Office formats), polished mobile apps, and a mature desktop app. If you need
@@ -150,6 +155,11 @@ export default function ComparePage() {
         </div>
         <div>
           <h2 className="text-xl font-semibold">PDFAirlock vs Smallpdf</h2>
+          <p className="mt-1 text-sm">
+            <Link href="/smallpdf-alternative" className="font-medium text-brand underline">
+              Full breakdown: the Smallpdf alternative page →
+            </Link>
+          </p>
           <p className="mt-3 leading-relaxed text-ink-soft">
             Smallpdf pairs a clean interface with team features and e-signature workflows aimed at
             businesses. Like iLovePDF, its web tools are upload-based, and the free tier pushes
@@ -161,6 +171,11 @@ export default function ComparePage() {
         </div>
         <div>
           <h2 className="text-xl font-semibold">PDFAirlock vs Adobe&apos;s online tools</h2>
+          <p className="mt-1 text-sm">
+            <Link href="/adobe-acrobat-alternative" className="font-medium text-brand underline">
+              Full breakdown: the Acrobat alternative page →
+            </Link>
+          </p>
           <p className="mt-3 leading-relaxed text-ink-soft">
             Adobe Acrobat remains the deepest PDF editor there is — true in-place text editing,
             forms authoring, PDF/A, print production. Nothing in this category, us included,
@@ -173,6 +188,11 @@ export default function ComparePage() {
         </div>
         <div>
           <h2 className="text-xl font-semibold">PDFAirlock vs PDF24</h2>
+          <p className="mt-1 text-sm">
+            <Link href="/pdf24-alternative" className="font-medium text-brand underline">
+              Full breakdown: the PDF24 alternative page →
+            </Link>
+          </p>
           <p className="mt-3 leading-relaxed text-ink-soft">
             Credit where due: PDF24&apos;s free Windows desktop app processes files locally — on
             that dimension it and PDFAirlock agree completely, and if you&apos;re on Windows and
@@ -185,6 +205,11 @@ export default function ComparePage() {
         </div>
         <div>
           <h2 className="text-xl font-semibold">PDFAirlock vs Sejda</h2>
+          <p className="mt-1 text-sm">
+            <Link href="/sejda-alternative" className="font-medium text-brand underline">
+              Full breakdown: the Sejda alternative page →
+            </Link>
+          </p>
           <p className="mt-3 leading-relaxed text-ink-soft">
             Sejda deserves a mention for honesty — it&apos;s one of the few incumbents whose web
             version offers some in-browser processing for certain tools, alongside its server-based
@@ -197,6 +222,11 @@ export default function ComparePage() {
         </div>
         <div>
           <h2 className="text-xl font-semibold">PDFAirlock vs Stirling PDF</h2>
+          <p className="mt-1 text-sm">
+            <Link href="/stirling-pdf-alternative" className="font-medium text-brand underline">
+              Full breakdown: the Stirling PDF alternative page →
+            </Link>
+          </p>
           <p className="mt-3 leading-relaxed text-ink-soft">
             Stirling PDF is the self-hoster&apos;s answer: open source, runs on your own server,
             more tools than us. If you enjoy running containers, it&apos;s excellent. Its

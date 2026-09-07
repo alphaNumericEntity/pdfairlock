@@ -17,6 +17,15 @@ const TOOL_SLUGS = [
   "add-page-numbers",
 ];
 
+const ALTERNATIVE_SLUGS = [
+  "ilovepdf-alternative",
+  "smallpdf-alternative",
+  "adobe-acrobat-alternative",
+  "pdf24-alternative",
+  "sejda-alternative",
+  "stirling-pdf-alternative",
+];
+
 test("pricing page is free-beta only — no dollar amounts anywhere", async ({ page }) => {
   await page.goto("/pricing");
   await expect(page.getByRole("heading", { name: "Everything is free right now" })).toBeVisible();
@@ -49,7 +58,10 @@ test("every tool page serves canonical + FAQ JSON-LD + privacy badge", async ({ 
 test("sitemap lists every page", async ({ request }) => {
   const xml = await (await request.get("/sitemap.xml")).text();
   const locs = xml.match(/<loc>/g) ?? [];
-  expect(locs.length).toBe(TOOL_SLUGS.length + 6);
+  expect(locs.length).toBe(TOOL_SLUGS.length + 6 + ALTERNATIVE_SLUGS.length);
+  for (const slug of ALTERNATIVE_SLUGS) {
+    expect(xml).toContain(`https://pdfairlock.com/${slug}`);
+  }
   for (const slug of TOOL_SLUGS) {
     expect(xml).toContain(`https://pdfairlock.com/${slug}`);
   }
@@ -65,6 +77,20 @@ test("content pages render with their headings", async ({ page }) => {
   const body = await page.locator("body").innerText();
   expect(body).toContain("iLovePDF");
   expect(body).toContain("Stirling");
+});
+
+test("every alternative page serves canonical, faq schema, and a migration table", async ({
+  request,
+}) => {
+  for (const slug of ALTERNATIVE_SLUGS) {
+    const res = await request.get(`/${slug}`);
+    expect(res.status(), slug).toBe(200);
+    const html = await res.text();
+    expect(html, slug).toContain(`rel="canonical" href="https://pdfairlock.com/${slug}"`);
+    expect(html, slug).toContain('"@type":"FAQPage"');
+    expect(html, slug).toContain("On PDFAirlock");
+    expect(html, slug).toContain("When to stay with");
+  }
 });
 
 test.describe("dark mode", () => {

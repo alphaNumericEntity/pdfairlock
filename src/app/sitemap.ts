@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { COMPETITORS } from "@/lib/competitors";
 import { SITE_URL } from "@/lib/site";
 import { TOOLS } from "@/lib/tools";
 
@@ -13,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/why-not-upload-pdfs`, priority: 0.7 },
     { url: `${base}/pdf-redaction-for-law-firms`, priority: 0.7 },
     { url: `${base}/compare`, priority: 0.7 },
+    ...COMPETITORS.map((c) => ({ url: `${base}/${c.slug}`, priority: 0.7 })),
     ...TOOLS.map((t) => ({ url: `${base}/${t.slug}`, priority: 0.9 })),
   ];
 }
