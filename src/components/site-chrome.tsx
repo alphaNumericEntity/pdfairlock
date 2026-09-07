@@ -63,6 +63,9 @@ export function SiteFooter() {
             <Link href="/pdf-redaction-for-law-firms" className="hover:text-ink">
               For law firms
             </Link>
+            <Link href="/compare" className="hover:text-ink">
+              vs iLovePDF &amp; others
+            </Link>
           </nav>
         </div>
         <p className="mt-8 text-xs text-zinc-400">

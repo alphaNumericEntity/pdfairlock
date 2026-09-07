@@ -118,6 +118,11 @@ export default function Home() {
             </tbody>
           </table>
         </div>
+        <p className="mt-4 text-sm">
+          <Link href="/compare" className="font-medium text-brand underline">
+            See the detailed comparison vs iLovePDF, Smallpdf, Adobe, PDF24 and more →
+          </Link>
+        </p>
       </section>
     </div>
   );

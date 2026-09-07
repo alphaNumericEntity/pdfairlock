@@ -49,7 +49,7 @@ test("every tool page serves canonical + FAQ JSON-LD + privacy badge", async ({ 
 test("sitemap lists every page", async ({ request }) => {
   const xml = await (await request.get("/sitemap.xml")).text();
   const locs = xml.match(/<loc>/g) ?? [];
-  expect(locs.length).toBe(TOOL_SLUGS.length + 5);
+  expect(locs.length).toBe(TOOL_SLUGS.length + 6);
   for (const slug of TOOL_SLUGS) {
     expect(xml).toContain(`https://pdfairlock.com/${slug}`);
   }
@@ -60,6 +60,11 @@ test("content pages render with their headings", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /Is it safe to upload PDFs/ })).toBeVisible();
   await page.goto("/pdf-redaction-for-law-firms");
   await expect(page.getByRole("heading", { name: /redaction for law firms/ })).toBeVisible();
+  await page.goto("/compare");
+  await expect(page.getByRole("heading", { name: /honest comparison/ })).toBeVisible();
+  const body = await page.locator("body").innerText();
+  expect(body).toContain("iLovePDF");
+  expect(body).toContain("Stirling");
 });
 
 test.describe("dark mode", () => {
