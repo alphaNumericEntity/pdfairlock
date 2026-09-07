@@ -58,7 +58,7 @@ test("every tool page serves canonical + FAQ JSON-LD + privacy badge", async ({ 
 test("sitemap lists every page", async ({ request }) => {
   const xml = await (await request.get("/sitemap.xml")).text();
   const locs = xml.match(/<loc>/g) ?? [];
-  expect(locs.length).toBe(TOOL_SLUGS.length + 6 + ALTERNATIVE_SLUGS.length);
+  expect(locs.length).toBe(TOOL_SLUGS.length + 6 + ALTERNATIVE_SLUGS.length + 4);
   for (const slug of ALTERNATIVE_SLUGS) {
     expect(xml).toContain(`https://pdfairlock.com/${slug}`);
   }
@@ -77,6 +77,22 @@ test("content pages render with their headings", async ({ page }) => {
   const body = await page.locator("body").innerText();
   expect(body).toContain("iLovePDF");
   expect(body).toContain("Stirling");
+});
+
+test("blog index and articles serve with canonical and blogposting schema", async ({ request }) => {
+  const index = await request.get("/blog");
+  expect(index.status()).toBe(200);
+  for (const slug of [
+    "csp-blocks-webassembly",
+    "pdf-redaction-verification",
+    "offline-website-service-worker",
+  ]) {
+    const res = await request.get(`/blog/${slug}`);
+    expect(res.status(), slug).toBe(200);
+    const html = await res.text();
+    expect(html, slug).toContain(`rel="canonical" href="https://pdfairlock.com/blog/${slug}"`);
+    expect(html, slug).toContain('"@type":"BlogPosting"');
+  }
 });
 
 test("every alternative page serves canonical, faq schema, and a migration table", async ({

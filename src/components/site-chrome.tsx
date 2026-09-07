@@ -66,6 +66,9 @@ export function SiteFooter() {
             <Link href="/compare" className="hover:text-ink">
               vs iLovePDF &amp; others
             </Link>
+            <Link href="/blog" className="hover:text-ink">
+              Engineering blog
+            </Link>
           </nav>
         </div>
         <p className="mt-8 text-xs text-zinc-400">
