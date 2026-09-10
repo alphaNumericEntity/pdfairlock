@@ -21,10 +21,21 @@ Pipeline (`src/lib/pdf/redact.ts` + worker ops in `src/lib/pdf/ops.ts`):
    of the page, so they're independent of render scale):
    - *Search*: pdf.js `getTextContent()` returns text items with transform matrices. For
      each match we map the item into viewport space (`Util.transform`), take the baseline
-     from the matrix, font height from `hypot(m[2], m[3])`, and approximate substring
-     positions by character-fraction of the item's width. The approximation is real — a
-     match inside a long item gets a slightly padded box — which is one reason boxes render
-     visibly for review and can be deleted or supplemented by hand.
+     from the matrix and font height from `hypot(m[2], m[3])`. The substring's horizontal
+     extent is measured with canvas `measureText` (kerning off) using the font face pdf.js
+     loaded for that item — forced via `page.getOperatorList()` and exposed through
+     `fontExtraProperties` (`fontSubstitutionLoadedName` for the standard-14 substitutes) —
+     and scaled to the item's true width, the way pdf.js's own text layer positions runs.
+     Measured against font-metric ground truth this is within 0.35pt for embedded and
+     standard fonts; the earlier character-count approximation left up to 10pt (1.5 glyphs)
+     of a match exposed mid-line. Every box gets 0.2em of padding on each side — over-cover
+     the neighbouring space, never under-cover a glyph. Vertically the box spans 1em above
+     the baseline to the font's own descent (from `getTextContent().styles`, floor 0.25em)
+     plus 0.05em below it. `getOperatorList()` resolves before the faces finish loading, so
+     the code also awaits `document.fonts.ready` before measuring. Residual sources of error: `Tc`/`Tw`
+     spacing inside an item (distributed proportionally, not per gap) and matches split
+     across items (below). `e2e/redact-geometry.spec.ts` pins the geometry against
+     ground truth and checks the burned pixels.
    - *Manual drag*: pointer events on an overlay div positioned over the rendered page.
      Required for scanned documents, which have no text layer (until OCR ships).
 2. **Burning.** Each *marked* page is rendered by pdf.js at 2× scale to a canvas, the boxes
@@ -74,6 +85,9 @@ target user ("are you SURE it's gone?") is the product.
 - **Search matches within a single text item**: a term split across pdf.js items (unusual
   kerning/spans) may not auto-match — manual boxes cover it; a cross-item matcher is a
   planned improvement.
+- **Rotated or vertical text runs**: search boxes assume a horizontal baseline (the box is
+  laid out along the page x-axis from the item's origin). A match inside rotated text gets a
+  wrong box — draw it manually and review the preview.
 - **The byte-scan's latin1 blindness** (above) — by design a secondary signal.
 - **We tell users to review the output anyway.** The verifier exists so nobody has to take
   our word; that includes not asking them to take the verifier's word as the final step for

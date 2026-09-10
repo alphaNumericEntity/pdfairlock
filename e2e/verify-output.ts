@@ -64,8 +64,13 @@ async function regionMeanLuma(
   return sum / (px.data.length / 4);
 }
 
+type NamedRegion = { name: string; x0: number; y0: number; x1: number; y1: number };
+
 const pageTexts = await extractPageTexts(bytes);
 const jpeg = await pageJpeg(bytes, 0);
+const extra: NamedRegion[] = process.argv[3] ? JSON.parse(process.argv[3]) : [];
+const regions: Record<string, number> = {};
+for (const r of extra) regions[r.name] = await regionMeanLuma(jpeg, r);
 console.log(
   JSON.stringify({
     page1Text: pageTexts[0] ?? null,
@@ -73,5 +78,6 @@ console.log(
     secretAnywhere: pageTexts.join(" ").includes(SECRET),
     redactedLuma: await regionMeanLuma(jpeg, { x0: 0.31, y0: 0.133, x1: 0.45, y1: 0.143 }),
     untouchedLuma: await regionMeanLuma(jpeg, { x0: 0.11, y0: 0.055, x1: 0.4, y1: 0.07 }),
+    regions,
   }),
 );
