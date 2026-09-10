@@ -11,5 +11,6 @@ public/qpdf.worker.js
 public/qpdf.wasm
 test-results/
 playwright-report/
+demo-out/
 .DS_Store
 *.local

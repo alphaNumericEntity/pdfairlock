@@ -5,7 +5,7 @@ import { chromium } from "@playwright/test";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 
 const BASE = process.env.DEMO_BASE_URL ?? "https://pdfairlock.com";
-const OUT = join(import.meta.dirname, "../test-results/demo");
+const OUT = join(import.meta.dirname, "../demo-out");
 const RAW = join(OUT, "raw");
 const WIDTH = 1280;
 const HEIGHT = 800;
