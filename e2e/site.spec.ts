@@ -8,6 +8,7 @@ const TOOL_SLUGS = [
   "rotate-pdf",
   "compress-pdf",
   "redact-pdf",
+  "pdf-redaction-checker",
   "sign-pdf",
   "unlock-pdf",
   "protect-pdf",
@@ -48,7 +49,7 @@ test("pricing page is free-beta only — no dollar amounts anywhere", async ({ p
 test("landing grid links to all 14 tools", async ({ page }) => {
   await page.goto("/");
   const grid = page.locator("#tools ul li a");
-  await expect(grid).toHaveCount(14);
+  await expect(grid).toHaveCount(15);
   for (const slug of TOOL_SLUGS) {
     await expect(page.locator(`#tools a[href="/${slug}"]`)).toHaveCount(1);
   }

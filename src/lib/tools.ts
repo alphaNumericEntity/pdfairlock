@@ -373,6 +373,64 @@ export const TOOLS: ToolMeta[] = [
     ],
   },
   {
+    slug: "pdf-redaction-checker",
+    name: "Redaction checker",
+    shortName: "Check redaction",
+    h1: "Check if a PDF is properly redacted — without uploading it",
+    tagline:
+      "Find text hiding under black boxes, redaction marks that were never applied, and leftover metadata.",
+    metaTitle: "PDF redaction checker — is the text really gone? Free, no upload",
+    metaDescription:
+      "Check whether a redacted PDF still contains the text under its black boxes, unapplied redaction marks, surviving names or numbers, and identifying metadata. Runs in your browser; the file is never uploaded.",
+    accept: "pdf",
+    steps: [
+      "Drop the redacted PDF onto the page. Every page is rendered and inspected in your browser.",
+      "Read the verdict: text found under dark boxes is listed page by page, along with unapplied redaction marks and identifying metadata.",
+      "Optionally type the names or numbers that were supposed to be removed. The report says on which pages they survive, or whether they linger in the raw file bytes.",
+      "If anything is recoverable, redact the original properly with Redact PDF, which destroys the text and re-runs this check on its own output.",
+    ],
+    useCases: [
+      {
+        title: "Before a filing leaves the office",
+        body: "Court documents, discovery bundles and FOI responses where a copy-paste leak makes headlines.",
+      },
+      {
+        title: "Documents redacted by someone else",
+        body: "A supplier or opposing party sends a 'redacted' file; find out in ten seconds whether it is.",
+      },
+      {
+        title: "Files redacted with a drawing tool",
+        body: "Black rectangles from a viewer or an image editor look right on screen and hide nothing.",
+      },
+    ],
+    notes: [
+      "Each page is rendered and every text run is checked against the pixels where it sits: text on uniformly dark pixels is covered, not visible, and is reported with the words themselves. White text on a dark banner is visible and is left alone.",
+      "Redact annotations are the marks Acrobat and others create before you click Apply. If they are still in the file, nothing was removed.",
+      "The checker reads the file's own text layer. A scan has none, so boxes on a scan only hide pixels; check the metadata and any OCR layer instead.",
+      "Nothing is modified and nothing is downloaded; this is a read-only inspection.",
+    ],
+    guide: "redact-pdf-without-uploading",
+    faq: [
+      {
+        q: "What does this checker actually detect?",
+        a: "Four things: extractable text sitting on uniformly dark pixels of the rendered page (covered, not visible), redaction annotations that were never applied, any search terms you enter that still appear in the text or in the raw bytes, and document metadata such as title, author, keywords or an XMP stream.",
+      },
+      {
+        q: "My file shows text under a box. What now?",
+        a: "The box was drawn over the text instead of removing it. Redact the original document again with a tool that rebuilds the page, such as Redact PDF here, and check the new output.",
+      },
+      {
+        q: "Can it check a scanned PDF?",
+        a: "It will render it and look for boxes, but a scan has no text layer to leak. The risk there is a hidden OCR layer or metadata, both of which the checker reports.",
+      },
+      {
+        q: "Does the checker keep or upload my document?",
+        a: "No. It runs entirely in your browser and never sends the file anywhere. Load the page, turn off your wifi and run the check to see for yourself.",
+      },
+      ...COMMON_FAQ.slice(1),
+    ],
+  },
+  {
     slug: "sign-pdf",
     name: "Sign PDF",
     shortName: "Sign",

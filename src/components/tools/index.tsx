@@ -8,6 +8,7 @@ import { PagesTool } from "./pages-tool";
 import { PasswordTool } from "./password-tool";
 import { PdfToImagesTool } from "./pdf-to-images-tool";
 import { RedactTool } from "./redact-tool";
+import { RedactionCheckerTool } from "./redaction-checker-tool";
 import { RotateTool } from "./rotate-tool";
 import { SignTool } from "./sign-tool";
 import { SplitTool } from "./split-tool";
@@ -21,6 +22,7 @@ export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "rotate-pdf": RotateTool,
   "compress-pdf": CompressTool,
   "redact-pdf": RedactTool,
+  "pdf-redaction-checker": RedactionCheckerTool,
   "sign-pdf": SignTool,
   "unlock-pdf": () => <PasswordTool mode="unlock" />,
   "protect-pdf": () => <PasswordTool mode="protect" />,

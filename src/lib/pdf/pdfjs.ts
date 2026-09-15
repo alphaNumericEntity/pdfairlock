@@ -158,6 +158,29 @@ export async function searchText(doc: PDFDocumentProxy, query: string): Promise<
   return matches;
 }
 
+export type TextBox = { str: string; x: number; y: number; w: number; h: number };
+
+export async function pageTextBoxes(doc: PDFDocumentProxy, pageNumber: number): Promise<TextBox[]> {
+  const pdfjs = await getPdfjs();
+  const page = await doc.getPage(pageNumber);
+  const viewport = page.getViewport({ scale: 1 });
+  const content = await page.getTextContent();
+  const boxes: TextBox[] = [];
+  for (const item of content.items) {
+    if (!("str" in item) || item.str.trim().length === 0) continue;
+    const tx = pdfjs.Util.transform(viewport.transform, item.transform);
+    const fontH = Math.hypot(tx[2], tx[3]);
+    boxes.push({
+      str: item.str,
+      x: tx[4] / viewport.width,
+      y: (tx[5] - fontH * 0.8) / viewport.height,
+      w: (item.width * viewport.scale) / viewport.width,
+      h: fontH / viewport.height,
+    });
+  }
+  return boxes;
+}
+
 export async function extractAllText(doc: PDFDocumentProxy): Promise<string[]> {
   const out: string[] = [];
   for (let p = 1; p <= doc.numPages; p++) {
