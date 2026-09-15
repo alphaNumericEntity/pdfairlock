@@ -10,6 +10,17 @@ export type Article = {
 
 export const ARTICLES: Article[] = [
   {
+    slug: "which-pdf-tools-upload-your-files",
+    kind: "guide",
+    title: "We tested 14 online PDF tools. Which ones actually upload your file?",
+    metaTitle: "Tested: which online PDF tools upload your files, and which never do",
+    metaDescription:
+      "The same two PDFs merged on 14 popular online tools with every network request logged, then again with the network cut. Byte counts per site, who received the files, and how to run the check yourself.",
+    date: "2026-09-15",
+    blurb:
+      "Every PDF site says your files are safe. We measured what they send: the same two synthetic PDFs, every request body counted, then the same job with the wifi off. The results, per site, with the method to reproduce them.",
+  },
+  {
     slug: "edit-pdf-without-uploading",
     kind: "guide",
     title: "How to edit a PDF without uploading it",

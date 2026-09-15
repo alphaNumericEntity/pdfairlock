@@ -19,6 +19,7 @@ const TOOL_SLUGS = [
 ];
 
 const ARTICLE_SLUGS = [
+  "which-pdf-tools-upload-your-files",
   "edit-pdf-without-uploading",
   "merge-pdf-without-uploading",
   "redact-pdf-without-uploading",
