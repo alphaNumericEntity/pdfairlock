@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldIcon, WifiOffIcon } from "@/components/icons";
+import { ARTICLES } from "@/lib/articles";
 import { TOOLS } from "@/lib/tools";
 
 export const metadata: Metadata = {
@@ -64,6 +65,26 @@ export default function Home() {
                   )}
                 </p>
                 <p className="mt-1.5 text-sm text-ink-soft">{t.tagline}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section id="guides" className="py-8">
+        <h2 className="text-2xl font-bold">Guides</h2>
+        <p className="mt-1 text-ink-soft">
+          Step by step, with the checks that prove nothing was uploaded.
+        </p>
+        <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+          {ARTICLES.filter((a) => a.kind === "guide").map((a) => (
+            <li key={a.slug}>
+              <Link
+                href={`/blog/${a.slug}`}
+                className="block h-full rounded-2xl border border-zinc-200 bg-surface p-5 transition-colors hover:border-brand"
+              >
+                <p className="font-semibold">{a.title}</p>
+                <p className="mt-1.5 text-sm text-ink-soft">{a.blurb}</p>
               </Link>
             </li>
           ))}
