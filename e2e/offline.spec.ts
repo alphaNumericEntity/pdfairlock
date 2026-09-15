@@ -17,7 +17,7 @@ test("the wifi-off demo: after one visit, merging works fully offline", async ({
 
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Merge PDF files" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /Merge PDF files/ })).toBeVisible();
 
   await page.locator('input[type="file"]').setInputFiles([
     { name: "a.pdf", mimeType: "application/pdf", buffer: await makePdf(2) },

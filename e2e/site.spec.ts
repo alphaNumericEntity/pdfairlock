@@ -17,6 +17,16 @@ const TOOL_SLUGS = [
   "add-page-numbers",
 ];
 
+const ARTICLE_SLUGS = [
+  "edit-pdf-without-uploading",
+  "merge-pdf-without-uploading",
+  "redact-pdf-without-uploading",
+  "sign-pdf-without-uploading",
+  "csp-blocks-webassembly",
+  "pdf-redaction-verification",
+  "offline-website-service-worker",
+];
+
 const ALTERNATIVE_SLUGS = [
   "ilovepdf-alternative",
   "smallpdf-alternative",
@@ -51,6 +61,8 @@ test("every tool page serves canonical + FAQ JSON-LD + privacy badge", async ({ 
     const html = await res.text();
     expect(html, slug).toContain(`rel="canonical" href="https://pdfairlock.com/${slug}"`);
     expect(html, slug).toContain('"@type":"FAQPage"');
+    expect(html, slug).toContain('"@type":"HowTo"');
+    expect(html, slug).toMatch(/<h1[^>]*>[^<]*without uploading/);
     expect(html, slug).toContain("nothing is uploaded");
   }
 });
@@ -58,7 +70,9 @@ test("every tool page serves canonical + FAQ JSON-LD + privacy badge", async ({ 
 test("sitemap lists every page", async ({ request }) => {
   const xml = await (await request.get("/sitemap.xml")).text();
   const locs = xml.match(/<loc>/g) ?? [];
-  expect(locs.length).toBe(TOOL_SLUGS.length + 6 + ALTERNATIVE_SLUGS.length + 4);
+  expect(locs.length).toBe(
+    TOOL_SLUGS.length + 6 + ALTERNATIVE_SLUGS.length + 1 + ARTICLE_SLUGS.length,
+  );
   for (const slug of ALTERNATIVE_SLUGS) {
     expect(xml).toContain(`https://pdfairlock.com/${slug}`);
   }
@@ -82,11 +96,7 @@ test("content pages render with their headings", async ({ page }) => {
 test("blog index and articles serve with canonical and blogposting schema", async ({ request }) => {
   const index = await request.get("/blog");
   expect(index.status()).toBe(200);
-  for (const slug of [
-    "csp-blocks-webassembly",
-    "pdf-redaction-verification",
-    "offline-website-service-worker",
-  ]) {
+  for (const slug of ARTICLE_SLUGS) {
     const res = await request.get(`/blog/${slug}`);
     expect(res.status(), slug).toBe(200);
     const html = await res.text();
