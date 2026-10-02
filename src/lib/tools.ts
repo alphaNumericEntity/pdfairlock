@@ -40,6 +40,9 @@ const COMMON_FAQ: FaqItem[] = [
   },
 ];
 
+// Bump when a tool page's copy changes; it is the sitemap's lastmod for all 15.
+export const TOOLS_UPDATED = "2026-09-15";
+
 export const TOOLS: ToolMeta[] = [
   {
     slug: "merge-pdf",

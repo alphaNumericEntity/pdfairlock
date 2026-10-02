@@ -12,6 +12,8 @@ export type Competitor = {
   faq: { q: string; a: string }[];
 };
 
+export const COMPETITORS_UPDATED = "2026-09-07";
+
 export const COMPETITORS: Competitor[] = [
   {
     slug: "ilovepdf-alternative",

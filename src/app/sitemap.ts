@@ -1,23 +1,27 @@
 import type { MetadataRoute } from "next";
 import { ARTICLES } from "@/lib/articles";
-import { COMPETITORS } from "@/lib/competitors";
+import { COMPETITORS, COMPETITORS_UPDATED } from "@/lib/competitors";
 import { SITE_URL } from "@/lib/site";
-import { TOOLS } from "@/lib/tools";
+import { TOOLS, TOOLS_UPDATED } from "@/lib/tools";
 
 export const dynamic = "force-static";
+
+const STATIC_PAGES: { path: string; lastModified: string }[] = [
+  { path: "", lastModified: "2026-09-15" },
+  { path: "/privacy", lastModified: "2026-09-04" },
+  { path: "/pricing", lastModified: "2026-09-04" },
+  { path: "/why-not-upload-pdfs", lastModified: "2026-08-04" },
+  { path: "/pdf-redaction-for-law-firms", lastModified: "2026-09-04" },
+  { path: "/compare", lastModified: "2026-09-07" },
+  { path: "/blog", lastModified: "2026-09-15" },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE_URL;
   return [
-    { url: base, priority: 1 },
-    { url: `${base}/privacy`, priority: 0.6 },
-    { url: `${base}/pricing`, priority: 0.6 },
-    { url: `${base}/why-not-upload-pdfs`, priority: 0.7 },
-    { url: `${base}/pdf-redaction-for-law-firms`, priority: 0.7 },
-    { url: `${base}/compare`, priority: 0.7 },
-    ...COMPETITORS.map((c) => ({ url: `${base}/${c.slug}`, priority: 0.7 })),
-    { url: `${base}/blog`, priority: 0.6 },
-    ...ARTICLES.map((a) => ({ url: `${base}/blog/${a.slug}`, priority: 0.6 })),
-    ...TOOLS.map((t) => ({ url: `${base}/${t.slug}`, priority: 0.9 })),
+    ...STATIC_PAGES.map((p) => ({ url: `${base}${p.path}`, lastModified: p.lastModified })),
+    ...COMPETITORS.map((c) => ({ url: `${base}/${c.slug}`, lastModified: COMPETITORS_UPDATED })),
+    ...ARTICLES.map((a) => ({ url: `${base}/blog/${a.slug}`, lastModified: a.date })),
+    ...TOOLS.map((t) => ({ url: `${base}/${t.slug}`, lastModified: TOOLS_UPDATED })),
   ];
 }
