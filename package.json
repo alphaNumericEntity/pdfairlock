@@ -2,6 +2,12 @@
   "name": "pdfairlock",
   "version": "0.1.0",
   "private": true,
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alphanumericentity/pdfairlock.git"
+  },
+  "homepage": "https://pdfairlock.com",
   "scripts": {
     "predev": "node scripts/build-worker.mjs",
     "dev": "next dev",
