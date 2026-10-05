@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SOURCE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Why your files never leave your device — and how to verify it",
@@ -32,6 +33,14 @@ export default function PrivacyPage() {
               Or: open your browser&apos;s developer tools → Network tab, then process a file.
               You&apos;ll see zero requests while your document is processed. Nothing to a server,
               nothing to a CDN, nothing to an analytics pixel — because none of those exist here.
+            </li>
+            <li>
+              Or read the code:{" "}
+              <a href={SOURCE_URL} rel="noopener" className="text-brand underline">
+                the whole site is on GitHub
+              </a>{" "}
+              under AGPL-3.0, including the security policy header described below and the tests
+              that check the redaction output.
             </li>
           </ol>
         </div>

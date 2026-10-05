@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SOURCE_URL } from "@/lib/site";
 import { Logo } from "./icons";
 
 export function SiteHeader() {
@@ -45,6 +46,16 @@ export function SiteFooter() {
             <p>
               Every tool on this site runs entirely in your browser. Your files never leave your
               device — turn off your wifi and see for yourself.
+            </p>
+            <p>
+              <a
+                href={SOURCE_URL}
+                rel="noopener"
+                className="font-medium text-brand-dark hover:text-brand"
+              >
+                Read the source on GitHub
+              </a>{" "}
+              — AGPL-3.0, so you can check every claim on this page instead of trusting it.
             </p>
           </div>
           <nav className="grid grid-cols-2 gap-x-12 gap-y-2">
