@@ -24,6 +24,7 @@ const ARTICLE_SLUGS = [
   "merge-pdf-without-uploading",
   "redact-pdf-without-uploading",
   "sign-pdf-without-uploading",
+  "redacted-doesnt-mean-deleted",
   "csp-blocks-webassembly",
   "pdf-redaction-verification",
   "offline-website-service-worker",

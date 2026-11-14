@@ -65,6 +65,17 @@ export const ARTICLES: Article[] = [
       "A signature page shouldn't cost you an account and a copy of the contract on someone's server. The local way, and the honest line between a drawn signature and a digital certificate.",
   },
   {
+    slug: "redacted-doesnt-mean-deleted",
+    kind: "engineering",
+    title: "[REDACTED] doesn't mean deleted",
+    metaTitle: "[REDACTED] doesn't mean deleted: how an edited PDF keeps its original",
+    metaDescription:
+      "A PDF that shows [REDACTED] and passes every check can still give the original back with one command. Why it happens, and how to check any PDF for it.",
+    date: "2026-11-14",
+    blurb:
+      "Copy the text: [REDACTED]. Search the file: nothing. One command brings the original back anyway. Why PDFs keep their own history, and how to catch it without knowing what was removed.",
+  },
+  {
     slug: "csp-blocks-webassembly",
     kind: "engineering",
     title: "Your CSP can silently kill WebAssembly: a production postmortem",
