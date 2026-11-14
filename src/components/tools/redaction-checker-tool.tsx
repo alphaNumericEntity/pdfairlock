@@ -20,7 +20,7 @@ const VERDICT = {
   },
   clean: {
     title: "✓ Nothing recoverable found",
-    body: "No text under dark boxes, no pending redaction marks, no leftover terms, no identifying metadata.",
+    body: "No text under dark boxes, no pending redaction marks, no earlier versions, no leftover terms, no identifying metadata.",
     className: "border-brand/40 bg-brand-soft text-ink",
   },
 } as const;
@@ -63,8 +63,9 @@ export function RedactionCheckerTool() {
       <p className="rounded-lg border border-zinc-200 bg-surface px-4 py-3 text-sm text-ink-soft">
         Drop a PDF that has already been redacted. The checker renders every page, finds the dark
         boxes, and looks for text still sitting underneath them — the copy-and-paste leak — plus
-        redaction marks that were never applied, leftover search terms and identifying metadata. The
-        file is inspected in your browser and never uploaded.
+        redaction marks that were never applied, earlier versions still saved inside the file,
+        leftover search terms and identifying metadata. The file is inspected in your browser and
+        never uploaded.
       </p>
       {!file && (
         <FileDrop
@@ -162,7 +163,59 @@ export function RedactionCheckerTool() {
 
             <div>
               <p className="font-semibold">
-                {Object.keys(report.termHitsByPage).length > 0 || report.termsInBytes.length > 0
+                {report.earlierVersions.count > 0 ? "⚠" : "✓"} Earlier versions inside the file
+              </p>
+              {report.earlierVersions.count === 0 ? (
+                <p className="mt-1 text-ink-soft">
+                  No earlier versions are saved inside this file.
+                </p>
+              ) : report.earlierVersions.removedText.length > 0 ? (
+                <ul className="mt-2 space-y-2">
+                  <li>
+                    {report.earlierVersions.count} earlier version(s) are still saved inside this
+                    file, and they contain text the current pages do not show:
+                  </li>
+                  <li>
+                    {report.earlierVersions.removedText.slice(0, 12).map((t) => (
+                      <code key={t} className="mr-1 rounded bg-red-50 px-1.5 py-0.5 text-red-900">
+                        {t}
+                      </code>
+                    ))}
+                    {report.earlierVersions.removedText.length > 12 &&
+                      ` and ${report.earlierVersions.removedText.length - 12} more`}
+                  </li>
+                  <li className="text-ink-soft">
+                    Cutting the file at the end of an earlier version brings that version back
+                    whole. This happens when a document is edited and saved, instead of exported as
+                    a new file.
+                  </li>
+                </ul>
+              ) : (
+                <p className="mt-1 text-ink-soft">
+                  {report.earlierVersions.count} earlier version(s) are saved inside this file.
+                  Their text matches the current pages, but an image or signature removed in a later
+                  edit could still be in one of them.
+                </p>
+              )}
+              {report.earlierVersions.checked < report.earlierVersions.count && (
+                <p className="mt-1 text-ink-soft">
+                  Checked {report.earlierVersions.checked} of {report.earlierVersions.count}: the
+                  original and the most recent.
+                </p>
+              )}
+              {report.earlierVersions.unreadable > 0 && (
+                <p className="mt-1 text-ink-soft">
+                  {report.earlierVersions.unreadable} earlier version(s) could not be opened, so
+                  their contents were not compared.
+                </p>
+              )}
+            </div>
+
+            <div>
+              <p className="font-semibold">
+                {Object.keys(report.termHitsByPage).length > 0 ||
+                report.termsInEarlierVersions.length > 0 ||
+                report.termsInBytes.length > 0
                   ? "⚠"
                   : "✓"}{" "}
                 Terms that should be gone
@@ -179,9 +232,11 @@ export function RedactionCheckerTool() {
                       <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-ink">{t}</code>{" "}
                       {report.termHitsByPage[t]
                         ? `still appears on page(s) ${report.termHitsByPage[t].join(", ")}`
-                        : report.termsInBytes.includes(t)
-                          ? "not in the visible text, but present in the raw file bytes (metadata or hidden content)"
-                          : "not found anywhere in the file"}
+                        : report.termsInEarlierVersions.includes(t)
+                          ? "gone from the pages, but still in an earlier version saved inside this file"
+                          : report.termsInBytes.includes(t)
+                            ? "not in the visible text, but present in the raw file bytes (metadata or hidden content)"
+                            : "not found anywhere in the file"}
                     </li>
                   ))}
                 </ul>

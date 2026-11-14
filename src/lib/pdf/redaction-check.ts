@@ -1,5 +1,6 @@
+import type { PDFDocumentProxy } from "pdfjs-dist";
 import { openPdf, pageTextBoxes, renderPage, type TextBox } from "./pdfjs";
-import { bytesContainText } from "./redact";
+import { bytesContainText, latin1 } from "./redact";
 import type { Progress } from "./types";
 
 export type Rect = { x: number; y: number; w: number; h: number };
@@ -12,10 +13,19 @@ export type PageCheck = {
   annotations: Record<string, number>;
 };
 
+export type EarlierVersions = {
+  count: number;
+  checked: number;
+  unreadable: number;
+  removedText: string[];
+};
+
 export type RedactionCheck = {
   pages: PageCheck[];
   termHitsByPage: Record<string, number[]>;
+  termsInEarlierVersions: string[];
   termsInBytes: string[];
+  earlierVersions: EarlierVersions;
   metadata: { key: string; value: string }[];
   xmpPresent: boolean;
   hasTextLayer: boolean;
@@ -28,6 +38,47 @@ const MIN_FILL = 0.85;
 const MAX_PAGE_FRACTION = 0.6;
 const RENDER_SCALE = 0.5;
 const METADATA_KEYS = ["Title", "Author", "Subject", "Keywords", "Creator", "Producer"];
+const MAX_EARLIER_VERSIONS = 25;
+const MIN_REMOVED_CHARS = 3;
+const REVISION_END = /startxref\s+(\d+)\s+%%EOF/g;
+
+// A linearized file's first-page section also ends in startxref/%%EOF, and no real xref sits at offset 0; neither is an earlier version.
+export function earlierRevisionEnds(raw: string): number[] {
+  const matches = [...raw.matchAll(REVISION_END)];
+  if (/\/Linearized\b/.test(raw.slice(0, 1024))) matches.shift();
+  const ends = matches.filter((m) => Number(m[1]) !== 0).map((m) => (m.index ?? 0) + m[0].length);
+  return ends.slice(0, -1);
+}
+
+function squash(text: string): string {
+  return text.replace(/\s+/g, "").toLowerCase();
+}
+
+export function removedText(earlierItems: string[], currentItems: string[]): string[] {
+  const current = currentItems.map(squash);
+  const exact = new Set(current);
+  const whole = current.join("");
+  const out = new Map<string, string>();
+  for (const item of earlierItems) {
+    const key = squash(item);
+    if (key.length < MIN_REMOVED_CHARS || out.has(key) || exact.has(key) || whole.includes(key)) {
+      continue;
+    }
+    out.set(key, item.replace(/\s+/g, " ").trim().slice(0, 80));
+  }
+  return [...out.values()];
+}
+
+async function textItems(doc: PDFDocumentProxy): Promise<string[]> {
+  const items: string[] = [];
+  for (let p = 1; p <= doc.numPages; p++) {
+    const content = await (await doc.getPage(p)).getTextContent();
+    for (const item of content.items) {
+      if ("str" in item && item.str.trim().length > 0) items.push(item.str);
+    }
+  }
+  return items;
+}
 
 export function darkMask(data: Uint8ClampedArray, width: number, height: number): Uint8Array {
   const dark = new Uint8Array(width * height);
@@ -152,10 +203,12 @@ export async function checkRedaction(
   const doc = await openPdf(bytes);
   const pages: PageCheck[] = [];
   const pageTexts: string[] = [];
+  const currentItems: string[] = [];
   let pendingRedactAnnotations = 0;
   for (let p = 1; p <= doc.numPages; p++) {
     const boxes = await pageTextBoxes(doc, p);
     pageTexts.push(boxes.map((b) => b.str).join(" "));
+    for (const b of boxes) currentItems.push(b.str);
     const page = await doc.getPage(p);
     const annotations: Record<string, number> = {};
     for (const a of await page.getAnnotations()) {
@@ -191,9 +244,6 @@ export async function checkRedaction(
     });
     if (hits.length > 0) termHitsByPage[term] = hits;
   }
-  const termsInBytes = cleanTerms.filter(
-    (term) => !(term in termHitsByPage) && bytesContainText(bytes, term),
-  );
 
   const { info, metadata: xmp } = await doc.getMetadata();
   const infoRecord = (info ?? {}) as Record<string, unknown>;
@@ -205,19 +255,61 @@ export async function checkRedaction(
   });
   await doc.destroy();
 
+  const ends = earlierRevisionEnds(latin1(bytes));
+  const toCheck =
+    ends.length <= MAX_EARLIER_VERSIONS
+      ? ends
+      : [ends[0], ...ends.slice(-(MAX_EARLIER_VERSIONS - 1))];
+  const removed = new Set<string>();
+  const termsInEarlierVersions = new Set<string>();
+  let unreadable = 0;
+  for (let i = 0; i < toCheck.length; i++) {
+    try {
+      const earlier = await openPdf(bytes.subarray(0, toCheck[i]));
+      const items = await textItems(earlier).finally(() => earlier.destroy());
+      for (const text of removedText(items, currentItems)) removed.add(text);
+      const joined = items.join(" ").toLowerCase();
+      for (const term of cleanTerms) {
+        if (!(term in termHitsByPage) && joined.includes(term.toLowerCase())) {
+          termsInEarlierVersions.add(term);
+        }
+      }
+    } catch {
+      unreadable++;
+    }
+    onProgress?.({ done: i + 1, total: toCheck.length, label: "Opening earlier versions" });
+  }
+  const earlierVersions: EarlierVersions = {
+    count: ends.length,
+    checked: toCheck.length,
+    unreadable,
+    removedText: [...removed],
+  };
+  const termsInBytes = cleanTerms.filter(
+    (term) =>
+      !(term in termHitsByPage) &&
+      !termsInEarlierVersions.has(term) &&
+      bytesContainText(bytes, term),
+  );
+
   const hasTextLayer = pages.some((pg) => pg.textChars > 0);
   const leak =
     pages.some((pg) => pg.textUnderRects.length > 0) ||
     Object.keys(termHitsByPage).length > 0 ||
-    pendingRedactAnnotations > 0;
+    pendingRedactAnnotations > 0 ||
+    earlierVersions.removedText.length > 0 ||
+    termsInEarlierVersions.size > 0;
   const warn =
     termsInBytes.length > 0 ||
     metadata.some((m) => m.key === "Author" || m.key === "Keywords") ||
-    xmp != null;
+    xmp != null ||
+    earlierVersions.count > 0;
   return {
     pages,
     termHitsByPage,
+    termsInEarlierVersions: [...termsInEarlierVersions],
     termsInBytes,
+    earlierVersions,
     metadata,
     xmpPresent: xmp != null,
     hasTextLayer,

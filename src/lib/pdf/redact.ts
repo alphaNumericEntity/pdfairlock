@@ -149,7 +149,7 @@ export function bytesContainText(bytes: Uint8Array, term: string): boolean {
   return latin1(bytes).toLowerCase().includes(term.trim().toLowerCase());
 }
 
-function latin1(bytes: Uint8Array): string {
+export function latin1(bytes: Uint8Array): string {
   let out = "";
   const chunk = 0x8000;
   for (let i = 0; i < bytes.length; i += chunk) {

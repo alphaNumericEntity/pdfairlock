@@ -381,15 +381,15 @@ export const TOOLS: ToolMeta[] = [
     shortName: "Check redaction",
     h1: "Check if a PDF is properly redacted — without uploading it",
     tagline:
-      "Find text hiding under black boxes, redaction marks that were never applied, and leftover metadata.",
+      "Find text hiding under black boxes, redaction marks that were never applied, earlier versions saved inside the file, and leftover metadata.",
     metaTitle: "PDF redaction checker — is the text really gone? Free, no upload",
     metaDescription:
-      "Check whether a redacted PDF still contains the text under its black boxes, unapplied redaction marks, surviving names or numbers, and identifying metadata. Runs in your browser; the file is never uploaded.",
+      "Check whether a redacted PDF still contains the text under its black boxes, an earlier unredacted version, unapplied redaction marks, surviving names or numbers, and identifying metadata. Runs in your browser; the file is never uploaded.",
     accept: "pdf",
     steps: [
       "Drop the redacted PDF onto the page. Every page is rendered and inspected in your browser.",
-      "Read the verdict: text found under dark boxes is listed page by page, along with unapplied redaction marks and identifying metadata.",
-      "Optionally type the names or numbers that were supposed to be removed. The report says on which pages they survive, or whether they linger in the raw file bytes.",
+      "Read the verdict: text found under dark boxes is listed page by page, along with unapplied redaction marks, text from earlier versions saved inside the file, and identifying metadata.",
+      "Optionally type the names or numbers that were supposed to be removed. The report says on which pages they survive, whether an earlier version saved inside the file still has them, or whether they linger in the raw file bytes.",
       "If anything is recoverable, redact the original properly with Redact PDF, which destroys the text and re-runs this check on its own output.",
     ],
     useCases: [
@@ -409,6 +409,7 @@ export const TOOLS: ToolMeta[] = [
     notes: [
       "Each page is rendered and every text run is checked against the pixels where it sits: text on uniformly dark pixels is covered, not visible, and is reported with the words themselves. White text on a dark banner is visible and is left alone.",
       "Redact annotations are the marks Acrobat and others create before you click Apply. If they are still in the file, nothing was removed.",
+      "Many editors save a change by appending it to the end of the file, so the version before the edit is still inside it, complete. The checker opens every earlier version it finds and lists any text the current pages no longer show. Linearized (fast web view) files are not mistaken for edit history.",
       "The checker reads the file's own text layer. A scan has none, so boxes on a scan only hide pixels; check the metadata and any OCR layer instead.",
       "Nothing is modified and nothing is downloaded; this is a read-only inspection.",
     ],
@@ -416,7 +417,11 @@ export const TOOLS: ToolMeta[] = [
     faq: [
       {
         q: "What does this checker actually detect?",
-        a: "Four things: extractable text sitting on uniformly dark pixels of the rendered page (covered, not visible), redaction annotations that were never applied, any search terms you enter that still appear in the text or in the raw bytes, and document metadata such as title, author, keywords or an XMP stream.",
+        a: "Five things: extractable text sitting on uniformly dark pixels of the rendered page (covered, not visible), redaction annotations that were never applied, earlier versions of the file still saved inside it along with any text they hold that the current pages do not show, any search terms you enter that still appear in the text, in an earlier version or in the raw bytes, and document metadata such as title, author, keywords or an XMP stream.",
+      },
+      {
+        q: "The pages look clean. How can an earlier version still be in the file?",
+        a: "PDF lets an editor save changes by appending them to the end of the file. Viewers show only the newest version, but everything before it is still there, and cutting the file at the end of an earlier version brings that version back whole. Text extraction reads only the newest version, so it reports the file as clean. Exporting or printing to a new PDF writes a single version, and Redact PDF here always writes a fresh file.",
       },
       {
         q: "My file shows text under a box. What now?",

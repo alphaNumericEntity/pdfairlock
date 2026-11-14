@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { darkMask, findDarkRects, hiddenText } from "../src/lib/pdf/redaction-check";
+import {
+  darkMask,
+  earlierRevisionEnds,
+  findDarkRects,
+  hiddenText,
+  removedText,
+} from "../src/lib/pdf/redaction-check";
 
 function canvas(width: number, height: number): Uint8ClampedArray {
   const data = new Uint8ClampedArray(width * height * 4);
@@ -114,5 +120,56 @@ describe("hiddenText", () => {
     const a = { str: "  secret  ", x: 10 / width, y: 32 / height, w: 30 / width, h: 8 / height };
     const b = { str: "secret", x: 60 / width, y: 32 / height, w: 30 / width, h: 8 / height };
     expect(check(data, [a, b])).toEqual(["secret"]);
+  });
+});
+
+describe("earlierRevisionEnds", () => {
+  const tail = (offset: number) => `trailer\n<< /Size 6 >>\nstartxref\n${offset}\n%%EOF\n`;
+
+  it("finds nothing in a file saved once", () => {
+    expect(earlierRevisionEnds(`%PDF-1.5\n1 0 obj\n<<>>\nendobj\n${tail(9)}`)).toEqual([]);
+  });
+
+  it("returns where each version before the last one ends", () => {
+    const original = `%PDF-1.5\n1 0 obj\n<<>>\nendobj\n${tail(9)}`;
+    const edited = `${original}4 0 obj\n<<>>\nendobj\n${tail(400)}`;
+    expect(earlierRevisionEnds(edited)).toEqual([original.length - 1]);
+  });
+
+  it("does not mistake the first-page section of a linearized file for history", () => {
+    const linearized = `%PDF-1.5\n1 0 obj\n<< /Linearized 1 >>\nendobj\n${tail(0)}2 0 obj\n<<>>\nendobj\n${tail(216)}`;
+    expect(earlierRevisionEnds(linearized)).toEqual([]);
+  });
+
+  it("still finds history in a linearized file that was edited afterwards", () => {
+    const linearized = `%PDF-1.5\n1 0 obj\n<< /Linearized 1 >>\nendobj\n${tail(0)}2 0 obj\n<<>>\nendobj\n${tail(216)}`;
+    const edited = `${linearized}4 0 obj\n<<>>\nendobj\n${tail(900)}`;
+    expect(earlierRevisionEnds(edited)).toEqual([linearized.length - 1]);
+  });
+
+  it("ignores an %%EOF that is not the end of a version", () => {
+    const raw = `%PDF-1.5\n1 0 obj\n<< /Length 6 >>\nstream\n%%EOF\nendstream\nendobj\n${tail(9)}`;
+    expect(earlierRevisionEnds(raw)).toEqual([]);
+  });
+});
+
+describe("removedText", () => {
+  it("reports runs that exist only in the earlier version", () => {
+    expect(
+      removedText(
+        ["Name: Jane Exampleton", "Status: closed"],
+        ["Name: [REDACTED]", "Status: closed"],
+      ),
+    ).toEqual(["Name: Jane Exampleton"]);
+  });
+
+  it("does not report text that was only split or spaced differently", () => {
+    expect(
+      removedText(["Total amount due", "Status:closed"], ["Total amount", "due", "Status: closed"]),
+    ).toEqual([]);
+  });
+
+  it("ignores fragments under three characters and reports each removal once", () => {
+    expect(removedText(["ab", "Secret one", "Secret  one"], [])).toEqual(["Secret one"]);
   });
 });
