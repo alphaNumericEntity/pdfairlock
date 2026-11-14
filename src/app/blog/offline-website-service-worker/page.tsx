@@ -33,11 +33,11 @@ export default function Page() {
       <p>
         The embarrassing one, found only because I wrote a test for the exact wording of the
         promise: <em>first</em> visit → airplane mode → reload → merge a PDF. It failed. A
-        runtime-caching worker only caches what got requested, and the page&apos;s own HTML and
-        chunks were fetched <em>before</em> the worker took control; the PDF-engine worker script
-        wasn&apos;t fetched at all until the first operation ran. So the demo worked beautifully for
-        anyone who had already used a tool while online — which described me, every time I demoed it
-        — and broke for the actual promise made to a first-time visitor.
+        runtime-caching worker only caches what got requested, and the page's own HTML and chunks
+        were fetched <em>before</em> the worker took control; the PDF-engine worker script wasn't
+        fetched at all until the first operation ran. So the demo worked beautifully for anyone who
+        had already used a tool while online — which described me, every time I demoed it — and
+        broke for the actual promise made to a first-time visitor.
       </p>
       <p>
         The honest fix is precaching: at install time, the service worker fetches the complete asset
@@ -58,14 +58,14 @@ self.addEventListener("install", (e) =>
       <h2>Wrong version #3: correct code, wrong deployment</h2>
       <p>
         The manifest generator ran as an npm <code>postbuild</code> script writing into the output
-        folder. Locally: perfect. In production: the manifest 404&apos;d, and offline quietly
-        degraded back to version #2. Two platform behaviors conspired — the host invoked the
-        framework&apos;s build directly (skipping npm lifecycle scripts), and its framework-aware
-        pipeline reconstructed the deployment from intermediate artifacts, ignoring files added to
-        the output folder afterwards. The durable fix was to opt out of the cleverness entirely:
-        build to a static folder, tell the platform to serve that folder verbatim. Production now
-        behaves byte-for-byte like the local test server, which retired a whole category of
-        &ldquo;works on my machine&rdquo;.
+        folder. Locally: perfect. In production: the manifest 404'd, and offline quietly degraded
+        back to version #2. Two platform behaviors conspired — the host invoked the framework's
+        build directly (skipping npm lifecycle scripts), and its framework-aware pipeline
+        reconstructed the deployment from intermediate artifacts, ignoring files added to the output
+        folder afterwards. The durable fix was to opt out of the cleverness entirely: build to a
+        static folder, tell the platform to serve that folder verbatim. Production now behaves
+        byte-for-byte like the local test server, which retired a whole category of “works on my
+        machine”.
       </p>
       <h2>The test is the spec</h2>
       <p>

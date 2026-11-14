@@ -93,8 +93,8 @@ export default function Page() {
           afterwards.
         </li>
         <li>
-          <strong className="text-ink">Big scans get bigger.</strong> Merging doesn&apos;t compress.
-          If the result has to get under an email limit,{" "}
+          <strong className="text-ink">Big scans get bigger.</strong> Merging doesn't compress. If
+          the result has to get under an email limit,{" "}
           <Link href="/compress-pdf" className="text-brand underline">
             Compress PDF
           </Link>{" "}
@@ -126,9 +126,8 @@ export default function Page() {
       <h2>The built-in options</h2>
       <p>
         <strong className="text-ink">macOS:</strong> Preview merges locally. Open the first PDF,
-        show the thumbnail sidebar, then drag the second PDF&apos;s pages into it and save. It
-        works; it is just fiddly for more than two files and offers no reordering beyond dragging
-        thumbnails.
+        show the thumbnail sidebar, then drag the second PDF's pages into it and save. It works; it
+        is just fiddly for more than two files and offers no reordering beyond dragging thumbnails.
       </p>
       <p>
         <strong className="text-ink">Windows:</strong> there is no built-in merge. Print to PDF
@@ -137,8 +136,8 @@ export default function Page() {
       </p>
       <p>
         <strong className="text-ink">Command line:</strong> qpdf and pdftk merge fine and are
-        entirely local. If you already have one installed, use it. If you don&apos;t, the browser
-        tool gets you the same guarantee without installing anything.
+        entirely local. If you already have one installed, use it. If you don't, the browser tool
+        gets you the same guarantee without installing anything.
       </p>
     </ArticleLayout>
   );

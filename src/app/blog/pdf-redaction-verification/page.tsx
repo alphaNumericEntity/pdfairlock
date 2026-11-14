@@ -47,8 +47,8 @@ export default function Page() {
       <p>
         After producing the output, the tool re-opens it — as if it were a stranger&apos;s file —
         and audits it. Redacted pages must yield zero extractable text. Every searched term is then
-        hunted across the extracted text of <em>all</em> pages: if &ldquo;Jane Doe&rdquo; survives
-        on page 3 because you removed that box, the report doesn&apos;t show a vague red X — it says{" "}
+        hunted across the extracted text of <em>all</em> pages: if “Jane Doe” survives on page 3
+        because you removed that box, the report doesn't show a vague red X — it says{" "}
         <em>page 3</em>, go add a box. A raw byte-scan runs as a tripwire behind the text checks,
         and the report says which check is the strong guarantee and which is heuristic, because a
         verifier that overstates its certainty is just the black rectangle again, one level up.

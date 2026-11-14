@@ -132,10 +132,10 @@ export default async function ToolPage({ params }: { params: Promise<{ tool: str
         </p>
         <ol className="mt-3 list-decimal space-y-2 pl-5 leading-relaxed text-ink-soft">
           <li>
-            <strong className="text-ink">Watch the network.</strong> Open your browser&apos;s
-            developer tools, switch to the Network tab, then run the tool. The only requests you
-            will see are the site&apos;s own files — none of them carries your document — and once
-            the app is cached there are no requests at all.
+            <strong className="text-ink">Watch the network.</strong> Open your browser's developer
+            tools, switch to the Network tab, then run the tool. The only requests you will see are
+            the site's own files — none of them carries your document — and once the app is cached
+            there are no requests at all.
           </li>
           <li>
             <strong className="text-ink">Pull the plug.</strong> Load this page, turn off your wifi

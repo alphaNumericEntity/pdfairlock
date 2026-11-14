@@ -91,8 +91,8 @@ export default function ComparePage() {
       <p className="mt-4 text-lg text-ink-soft">
         The tools below are all competent, and some do things we don&apos;t. The structural
         difference is a single question: <strong>does your file leave your device?</strong> For
-        theirs, processing happens on a server. For ours, it can&apos;t — and you don&apos;t have to
-        take either claim on faith:{" "}
+        theirs, processing happens on a server. For ours, it can't — and you don't have to take
+        either claim on faith:{" "}
         <Link href="/privacy" className="text-brand underline">
           here&apos;s how to verify any PDF tool in 30 seconds
         </Link>
@@ -197,10 +197,10 @@ export default function ComparePage() {
             Credit where due: PDF24&apos;s free Windows desktop app processes files locally — on
             that dimension it and PDFAirlock agree completely, and if you&apos;re on Windows and
             happy installing software, it&apos;s a genuinely good free option. The differences:
-            PDF24&apos;s <em>online</em> tools are server-based like everyone else&apos;s, the
-            desktop app is Windows-only, and there&apos;s no equivalent of a redaction verification
-            report. PDFAirlock brings the local-processing model to every OS with a browser — Mac,
-            Linux, ChromeOS, locked-down work machines where you can&apos;t install anything.
+            PDF24&apos;s <em>online</em> tools are server-based like everyone else's, the desktop
+            app is Windows-only, and there's no equivalent of a redaction verification report.
+            PDFAirlock brings the local-processing model to every OS with a browser — Mac, Linux,
+            ChromeOS, locked-down work machines where you can't install anything.
           </p>
         </div>
         <div>

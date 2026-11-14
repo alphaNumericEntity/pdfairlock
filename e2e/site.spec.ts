@@ -84,6 +84,19 @@ test("sitemap lists every page", async ({ request }) => {
   }
 });
 
+test("no word is glued to the bold, italic, code or link before it", async ({ request }) => {
+  const xml = await (await request.get("/sitemap.xml")).text();
+  const paths = [...xml.matchAll(/<loc>https:\/\/pdfairlock\.com([^<]*)<\/loc>/g)].map(
+    (m) => m[1] || "/",
+  );
+  for (const path of paths) {
+    const html = await (await request.get(path)).text();
+    const body = html.slice(html.indexOf("<body"));
+    // The build drops the space after an inline element when the text that follows holds an HTML entity such as &apos;, so type the character itself.
+    expect(body.match(/<\/(?:em|strong|code|a)>[A-Za-z]/g), path).toBeNull();
+  }
+});
+
 test("content pages render with their headings", async ({ page }) => {
   await page.goto("/why-not-upload-pdfs");
   await expect(page.getByRole("heading", { name: /Is it safe to upload PDFs/ })).toBeVisible();
