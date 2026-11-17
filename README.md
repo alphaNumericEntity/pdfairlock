@@ -4,6 +4,8 @@
 split, compress, redact, sign, password-protect and convert, with no upload step anywhere in
 the product.
 
+<p align="center"><img src="docs/img/redaction-checker-offline.png" width="560" alt="The redaction checker on pdfairlock.com with the network switched off, finding a name and an account number still in the file under black boxes"></p>
+
 The claim is not "we delete your files quickly". It is that there is nowhere to upload them
 to: the site is static files plus your own browser, and the response headers forbid the page
 from talking to any other host.
